@@ -14,7 +14,7 @@ namespace CheckersBot.Models
         [EnumMember(Value = "W")]
         WhiteKing,
         [EnumMember(Value = "b")]
-        BlackWhite,
+        BlackPiece,
         [EnumMember(Value = "B")]
         BlackKing
     }
