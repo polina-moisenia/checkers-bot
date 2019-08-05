@@ -13,10 +13,11 @@ namespace CheckersBot.Controllers
     {
         private readonly ISerializer _serializer;
         private readonly IMove _move;
-        public MoveController(ISerializer serializer)
+
+        public MoveController(ISerializer serializer, IMove moveService)
         {
             _serializer = serializer;
-            _move = new MoveService();
+            _move = moveService;
         }
 
         [HttpPost]
