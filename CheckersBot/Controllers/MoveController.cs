@@ -27,8 +27,8 @@ namespace CheckersBot.Controllers
             {
                 new Move
                 {
-                    StartingPoint = new Cell {X = 2, Y = 2},
-                    EndingPoint = new Cell {X = 3, Y = 3},
+                    StartingPoint = new Cell {X = 0, Y = 5},
+                    EndingPoint = new Cell {X = 1, Y = 4},
                 }
             };
 
