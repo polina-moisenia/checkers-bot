@@ -5,8 +5,8 @@ namespace CheckersBot.Models
     public class Move
     {
         [JsonProperty("from")]
-        public int StartingPoint { get; set; }
+        public Cell StartingPoint { get; set; }
         [JsonProperty("to")]
-        public int EndingPoint { get; set; }
+        public Cell EndingPoint { get; set; }
     }
 }
