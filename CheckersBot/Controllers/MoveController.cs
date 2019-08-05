@@ -23,7 +23,16 @@ namespace CheckersBot.Controllers
         public IActionResult Post([FromBody] BoardModel board)
         {
             //var nextMove = _move.GetNextMove(board);
-            var response = Content(_serializer.Serialize(new List<Move> {new Move()}), "application/json");
+            var nextMove = new List<Move>
+            {
+                new Move
+                {
+                    StartingPoint = new Cell {X = 2, Y = 2},
+                    EndingPoint = new Cell {X = 3, Y = 3},
+                }
+            };
+
+            var response = Content(_serializer.Serialize(nextMove), "application/json");
             response.StatusCode = StatusCodes.Status200OK;
 
             return response;
