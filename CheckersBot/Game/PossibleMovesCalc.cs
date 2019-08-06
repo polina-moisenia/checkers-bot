@@ -10,17 +10,18 @@ namespace CheckersBot.Game
             var possibleMoves = new List<Move>();
 
             int verticalIncrement = teamPlaying == Team.White ? -1 : 1;
-            var incterements = new List<Cell>
+            var increments = new List<Cell>
             {
                 new Cell {X = 1, Y = verticalIncrement},
                 new Cell {X = -1, Y = verticalIncrement}
             };
 
-            foreach (var incr in incterements)
+
+            for (int i = 0; i < 8; i++)
             {
-                for (int i = 0; i < 8; i++)
+                for (int j = 0; j < 8; j++)
                 {
-                    for (int j = 0; j < 8; j++)
+                    foreach (var incr in increments)
                     {
                         if (board[i, j] == CellState.BlackPiece && teamPlaying == Team.Black ||
                             board[i, j] == CellState.WhitePiece && teamPlaying == Team.White)
@@ -37,7 +38,58 @@ namespace CheckersBot.Game
                             }
                         }
 
-                        //TODO add kings
+                    }
+
+                    if (board[i, j] == CellState.BlackKing && teamPlaying == Team.Black ||
+                        board[i, j] == CellState.WhiteKing && teamPlaying == Team.White)
+                    {
+                        int diff = 1;
+                        while (i + diff < 8 && j + diff < 8 && board[i + diff, j + diff] == CellState.Empty)
+                        {
+                            var nextMove = new Move
+                            {
+                                StartingPoint = new Cell {X = i, Y = j},
+                                EndingPoint = new Cell {X = i + diff, Y = j + diff}
+                            };
+                            possibleMoves.Add(nextMove);
+                            diff++;
+                        }
+
+                        diff = 1;
+                        while (i - diff >= 0 && j - diff >= 0 && board[i - diff, j - diff] == CellState.Empty)
+                        {
+                            var nextMove = new Move
+                            {
+                                StartingPoint = new Cell {X = i, Y = j},
+                                EndingPoint = new Cell {X = i - diff, Y = j - diff}
+                            };
+                            possibleMoves.Add(nextMove);
+                            diff++;
+                        }
+
+                        diff = 1;
+                        while (i + diff < 8 && j - diff >= 0 && board[i + diff, j - diff] == CellState.Empty)
+                        {
+                            var nextMove = new Move
+                            {
+                                StartingPoint = new Cell {X = i, Y = j},
+                                EndingPoint = new Cell {X = i + diff, Y = j - diff}
+                            };
+                            possibleMoves.Add(nextMove);
+                            diff++;
+                        }
+
+                        diff = 1;
+                        while (i - diff >= 0 && j + diff < 8 && board[i - diff, j + diff] == CellState.Empty)
+                        {
+                            var nextMove = new Move
+                            {
+                                StartingPoint = new Cell {X = i, Y = j},
+                                EndingPoint = new Cell {X = i - diff, Y = j + diff}
+                            };
+                            possibleMoves.Add(nextMove);
+                            diff++;
+                        }
                     }
                 }
             }

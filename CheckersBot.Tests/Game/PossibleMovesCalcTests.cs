@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using CheckersBot.Extensions;
 using CheckersBot.Game;
 using CheckersBot.Models;
@@ -19,7 +18,7 @@ namespace CheckersBot.Tests.Game
         }
 
         [Test]
-        public void GameStartTest()
+        public void WhiteMovesTest()
         {
             string jsonData = @"{
                 'team': 'w',
@@ -80,7 +79,7 @@ namespace CheckersBot.Tests.Game
         }
 
         [Test]
-        public void GameBlackTest()
+        public void BlackMovesTest()
         {
             string jsonData = @"{
                 'team': 'b',
@@ -146,7 +145,7 @@ namespace CheckersBot.Tests.Game
         }
 
         [Test]
-        public void GameKingBlackTest()
+        public void BlackKingMovesTest()
         {
             string jsonData = @"{
                 'team': 'b',
@@ -190,6 +189,67 @@ namespace CheckersBot.Tests.Game
                 {
                     EndingPoint = new Cell {X = 5, Y = 3},
                     StartingPoint = new Cell {X = 7, Y = 5}
+                }
+            };
+
+            CheckListOfMoves(moves, expectedMoves);
+        }
+
+        [Test]
+        public void WhiteKingMovesTest()
+        {
+            string jsonData = @"{
+                'team': 'w',
+                'field': [
+                    ['.', '.', '.', 'b', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', 'b', '.'],
+                    ['.', '.', '.', '.', '.', 'B', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', 'b', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', 'W', '.', '.', '.', '.', '.']
+                ] 
+            }";
+            var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
+            var moves = _movesCalc.GetPossibleMoves(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<Move>
+            {
+                new Move
+                {
+                    StartingPoint = new Cell {X = 2, Y = 7},
+                    EndingPoint = new Cell {X = 1, Y = 6}
+                },
+                new Move
+                {
+                    StartingPoint = new Cell {X = 2, Y = 7},
+                    EndingPoint = new Cell {X = 0, Y = 5}
+                },
+                new Move
+                {
+                    StartingPoint = new Cell {X = 2, Y = 7},
+                    EndingPoint = new Cell {X = 3, Y = 6}
+                },
+                new Move
+                {
+                    StartingPoint = new Cell {X = 2, Y = 7},
+                    EndingPoint = new Cell {X = 4, Y = 5}
+                },
+                new Move
+                {
+                    StartingPoint = new Cell {X = 2, Y = 7},
+                    EndingPoint = new Cell {X = 5, Y = 4}
+                },
+                new Move
+                {
+                    StartingPoint = new Cell {X = 2, Y = 7},
+                    EndingPoint = new Cell {X = 6, Y = 3}
+                },
+                new Move
+                {
+                    StartingPoint = new Cell {X = 2, Y = 7},
+                    EndingPoint = new Cell {X = 7, Y = 2}
                 }
             };
 
