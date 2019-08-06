@@ -17,27 +17,6 @@ namespace CheckersBot.Tests
         }
 
         [Fact]
-        public void EmptyTest()
-        {
-            string jsonData = @"{  
-                'team': 'w',  
-                'field': [
-                    ['.', 'b', '.', 'b', '.', 'b', '.', 'b'],
-                    ['b', '.', 'b', '.', 'b', '.', 'b', '.'],
-                    ['.', 'b', '.', 'b', '.', 'b', '.', 'b'],
-                    ['.', '.', '.', '.', '.', '.', '.', '.'],
-                    ['.', '.', '.', '.', '.', '.', '.', '.'],
-                    ['w', '.', 'w', '.', 'w', '.', 'w', '.'],
-                    ['.', 'w', '.', 'w', '.', 'w', '.', 'w'],
-                    ['w', '.', 'w', '.', 'w', '.', 'w', '.']
-                ] 
-            }";
-            var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
-            var move = _moveService.GetPossibleBeats(boardModel);
-            Assert.Equal(move, new List<List<Move>>());
-        }
-
-        [Fact]
         public void OnePossibleBeatTest()
         {
             string jsonData = @"{  
