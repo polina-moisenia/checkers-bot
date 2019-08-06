@@ -40,12 +40,15 @@ namespace CheckersBot.Tests
                 {
                     new Move
                     {
-                        StartingPoint = new Cell {X = 1, Y = 5},
-                        EndingPoint = new Cell {X = 3, Y = 3}
+                        StartingPoint = new Cell {X = 1, Y = 4},
+                        EndingPoint = new Cell {X = 3, Y = 2}
                     }
                 }
             };
-            Assert.Equal(move, actualMoves);
+
+            var moveStr = JsonConvert.SerializeObject(move);
+            var actualMovesStr = JsonConvert.SerializeObject(actualMoves);
+            Assert.Equal(moveStr, actualMovesStr);
         }
 
         [Fact]
@@ -85,7 +88,10 @@ namespace CheckersBot.Tests
                     }
                 }
             };
-            Assert.Equal(move, actualMoves);
+
+            var moveStr = JsonConvert.SerializeObject(move);
+            var actualMovesStr = JsonConvert.SerializeObject(actualMoves);
+            Assert.Equal(moveStr, actualMovesStr);
         }
 
 
@@ -136,7 +142,10 @@ namespace CheckersBot.Tests
                     }
                 }
             };
-            Assert.Equal(move, actualMoves);
+
+            var moveStr = JsonConvert.SerializeObject(move);
+            var actualMovesStr = JsonConvert.SerializeObject(actualMoves);
+            Assert.Equal(moveStr, actualMovesStr);
         }
 
         [Fact]
@@ -191,7 +200,10 @@ namespace CheckersBot.Tests
                     }
                 }
             };
-            Assert.Equal(move, actualMoves);
+
+            var moveStr = JsonConvert.SerializeObject(move);
+            var actualMovesStr = JsonConvert.SerializeObject(actualMoves);
+            Assert.Equal(moveStr, actualMovesStr);
         }
     }
 }
