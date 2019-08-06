@@ -2,6 +2,7 @@
 using CheckersBot.Models;
 using CheckersBot.Serialization;
 using CheckersBot.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,7 @@ namespace CheckersBot.Controllers
             _move = moveService;
         }
 
+        [EnableCors("AllowAllPolicy")]
         [HttpPost]
         public IActionResult Post([FromBody] BoardModel board)
         {
