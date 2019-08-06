@@ -46,7 +46,7 @@ namespace CheckersBot.Services
         {
             var boardArray = ConvertBoardToArray(currentBoard);
             var teamPlaying = currentBoard.TeamToMoveNext;
-            var possibleMoves = new List<Move>();
+            var possibleMoves = new List<List<Move>>();
 
             for (int i = 0; i < 8; i++)
             {
@@ -57,29 +57,58 @@ namespace CheckersBot.Services
                         if (i - 2 >= 0 && j - 2 >= 0 &&
                             boardArray[i - 1, j - 1] == CellState.BlackPiece && boardArray[i - 2, j - 2] == CellState.Empty)
                         {
-                            possibleMoves.Add(new Move
+                            possibleMoves.Add(new List<Move>
                             {
-                                StartingPoint = new Cell { X = i, Y = j },
-                                EndingPoint = new Cell { X = i - 2, Y = j - 2 }
+                                new Move
+                                {
+                                    StartingPoint = new Cell { X = i, Y = j },
+                                    EndingPoint = new Cell { X = i - 2, Y = j - 2 }
+                                }
                             });
                         }
                         if (i + 2 <= 7 && j - 2 >= 0 &&
                             boardArray[i + 1, j - 1] == CellState.BlackPiece && boardArray[i + 2, j - 2] == CellState.Empty)
                         {
-                            possibleMoves.Add(new Move
+                            possibleMoves.Add(new List<Move>
                             {
-                                StartingPoint = new Cell { X = i, Y = j },
-                                EndingPoint = new Cell { X = i + 2, Y = j - 2 }
+                                new Move {
+                                    StartingPoint = new Cell { X = i, Y = j },
+                                    EndingPoint = new Cell { X = i + 2, Y = j - 2 }
+                                }
                             });
                         }
-                    } else if (boardArray[i, j] == CellState.BlackPiece && teamPlaying == Team.Black)
+                    }
+                    else if (boardArray[i, j] == CellState.BlackPiece && teamPlaying == Team.Black)
                     {
-
+                        if (i + 2 <= 7 && j + 2 <= 7 &&
+                            boardArray[i + 1, j + 1] == CellState.WhitePiece && boardArray[i + 2, j + 2] == CellState.Empty)
+                        {
+                            possibleMoves.Add(new List<Move>
+                            {
+                                new Move
+                                {
+                                    StartingPoint = new Cell { X = i, Y = j },
+                                    EndingPoint = new Cell { X = i + 2, Y = j + 2 }
+                                }
+                            });
+                        }
+                        if (i - 2 >= 0 && j + 2 <= 7 &&
+                            boardArray[i - 1, j + 1] == CellState.WhitePiece && boardArray[i - 2, j + 2] == CellState.Empty)
+                        {
+                            possibleMoves.Add(new List<Move>
+                            {
+                                new Move
+                                {
+                                    StartingPoint = new Cell { X = i, Y = j },
+                                    EndingPoint = new Cell { X = i - 2, Y = j + 2 }
+                                }
+                            });
+                        }
                     }
                 }
             }
 
-            return new List<List<Move>> { new List<Move>(possibleMoves) };
+            return possibleMoves;
             //return new List<List<Move>>();
         }
 
@@ -105,8 +134,8 @@ namespace CheckersBot.Services
                         {
                             var nextMove = new Move
                             {
-                                StartingPoint = new Cell {X = i, Y = j},
-                                EndingPoint = new Cell {X = i + incr.X, Y = j + incr.Y}
+                                StartingPoint = new Cell { X = i, Y = j },
+                                EndingPoint = new Cell { X = i + incr.X, Y = j + incr.Y }
                             };
 
                             if (ValidMove(nextMove, board))
