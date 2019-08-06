@@ -88,8 +88,59 @@ namespace CheckersBot.Tests
             Assert.Equal(move, actualMoves);
         }
 
+
         [Fact]
         public void TwoPlusTwoPossibleBeatsTest()
+        {
+            string jsonData = @"{  
+                'team': 'w',  
+                'field': [
+                    ['.', 'b', '.', 'b', '.', 'b', '.', 'b'],
+                    ['b', '.', 'b', '.', 'b', '.', 'b', '.'],
+                    ['.', 'b', '.', '.', '.', '.', '.', 'b'],
+                    ['.', '.', 'b', '.', 'b', '.', 'b', '.'],
+                    ['.', 'w', '.', '.', '.', '.', '.', 'w'],
+                    ['.', '.', 'w', '.', 'w', '.', '.', '.'],
+                    ['.', 'w', '.', 'w', '.', 'w', '.', 'w'],
+                    ['w', '.', 'w', '.', 'w', '.', 'w', '.']
+                ] 
+            }";
+            var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
+            var move = _moveService.GetPossibleBeats(boardModel);
+            var actualMoves = new List<List<Move>>
+            {
+                new List<Move>
+                {
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 1, Y = 4},
+                        EndingPoint = new Cell {X = 3, Y = 2}
+                    },
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 3, Y = 2},
+                        EndingPoint = new Cell {X = 5, Y = 4}
+                    }
+                },
+                new List<Move>
+                {
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 7, Y = 4},
+                        EndingPoint = new Cell {X = 5, Y = 2}
+                    },
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 5, Y = 2},
+                        EndingPoint = new Cell {X = 3, Y = 4}
+                    }
+                }
+            };
+            Assert.Equal(move, actualMoves);
+        }
+
+        [Fact]
+        public void TwoPlusThreePossibleBeatsTest()
         {
             string jsonData = @"{  
                 'team': 'w',  
@@ -117,8 +168,13 @@ namespace CheckersBot.Tests
                     },
                     new Move
                     {
-                        StartingPoint = new Cell {X = 3, Y = 4},
+                        StartingPoint = new Cell {X = 3, Y = 2},
                         EndingPoint = new Cell {X = 5, Y = 4}
+                    },
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 3, Y = 4},
+                        EndingPoint = new Cell {X = 7, Y = 2}
                     },
                 },
                 new List<Move>
