@@ -15,10 +15,11 @@ namespace CheckersBot.Game
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (boardArray[i, j] == CellState.WhitePiece && teamPlaying == Team.White)
+                    if ((boardArray[i, j] == CellState.WhitePiece || boardArray[i, j] == CellState.WhiteKing) && teamPlaying == Team.White)
                     {
                         if (i - 2 >= 0 && j - 2 >= 0 &&
-                            boardArray[i - 1, j - 1] == CellState.BlackPiece && boardArray[i - 2, j - 2] == CellState.Empty)
+                            (boardArray[i - 1, j - 1] == CellState.BlackPiece || boardArray[i - 1, j - 1] == CellState.BlackKing) &&
+                            boardArray[i - 2, j - 2] == CellState.Empty)
                         {
                             var beats = new List<Move>
                             {
@@ -32,7 +33,8 @@ namespace CheckersBot.Game
                             possibleBeats.Add(beats);
                         }
                         if (i + 2 <= 7 && j - 2 >= 0 &&
-                            boardArray[i + 1, j - 1] == CellState.BlackPiece && boardArray[i + 2, j - 2] == CellState.Empty)
+                            (boardArray[i + 1, j - 1] == CellState.BlackPiece || boardArray[i + 1, j - 1] == CellState.BlackKing) && 
+                            boardArray[i + 2, j - 2] == CellState.Empty)
                         {
                             var beats = new List<Move>
                             {
@@ -45,10 +47,11 @@ namespace CheckersBot.Game
                             possibleBeats.Add(beats);
                         }
                     }
-                    else if (boardArray[i, j] == CellState.BlackPiece && teamPlaying == Team.Black)
+                    else if ((boardArray[i, j] == CellState.BlackPiece || boardArray[i, j] == CellState.BlackKing) && teamPlaying == Team.Black)
                     {
                         if (i + 2 <= 7 && j + 2 <= 7 &&
-                            boardArray[i + 1, j + 1] == CellState.WhitePiece && boardArray[i + 2, j + 2] == CellState.Empty)
+                            (boardArray[i + 1, j + 1] == CellState.WhitePiece || boardArray[i + 1, j + 1] == CellState.WhiteKing)
+                            && boardArray[i + 2, j + 2] == CellState.Empty)
                         {
                             var beats = new List<Move>
                             {
@@ -63,7 +66,8 @@ namespace CheckersBot.Game
                             possibleBeats.Add(beats);
                         }
                         if (i - 2 >= 0 && j + 2 <= 7 &&
-                            boardArray[i - 1, j + 1] == CellState.WhitePiece && boardArray[i - 2, j + 2] == CellState.Empty)
+                            (boardArray[i - 1, j + 1] == CellState.WhitePiece || boardArray[i - 1, j + 1] == CellState.WhiteKing)
+                            && boardArray[i - 2, j + 2] == CellState.Empty)
                         {
                             var beats = new List<Move>
                             {
@@ -98,7 +102,7 @@ namespace CheckersBot.Game
             if (teamPlaying == Team.White)
             {
                 if (i - 2 >= 0 && j - 2 >= 0 &&
-                    boardArray[i - 1, j - 1] == CellState.BlackPiece && boardArray[i - 2, j - 2] == CellState.Empty)
+                    (boardArray[i - 1, j - 1] == CellState.BlackPiece || boardArray[i - 1, j - 1] == CellState.BlackKing) && boardArray[i - 2, j - 2] == CellState.Empty)
                 {
                     beats.Add(new Move
                     {
@@ -108,7 +112,7 @@ namespace CheckersBot.Game
                     appendSubsequentBeats(boardArray, teamPlaying, beats);
                 }
                 else if (i + 2 <= 7 && j - 2 >= 0 &&
-                  boardArray[i + 1, j - 1] == CellState.BlackPiece && boardArray[i + 2, j - 2] == CellState.Empty)
+                  (boardArray[i + 1, j - 1] == CellState.BlackPiece || boardArray[i + 1, j - 1] == CellState.BlackKing) && boardArray[i + 2, j - 2] == CellState.Empty)
                 {
                     beats.Add(new Move
                     {
@@ -118,7 +122,7 @@ namespace CheckersBot.Game
                     appendSubsequentBeats(boardArray, teamPlaying, beats);
                 }
                 else if (i + 2 <= 7 && j + 2 <= 7 &&
-                  boardArray[i + 1, j + 1] == CellState.BlackPiece && boardArray[i + 2, j + 2] == CellState.Empty)
+                  (boardArray[i + 1, j + 1] == CellState.BlackPiece || boardArray[i + 1, j + 1] == CellState.BlackKing) && boardArray[i + 2, j + 2] == CellState.Empty)
                 {
                     beats.Add(new Move
                     {
@@ -128,7 +132,7 @@ namespace CheckersBot.Game
                     appendSubsequentBeats(boardArray, teamPlaying, beats);
                 }
                 else if (i - 2 >= 0 && j + 2 <= 7 &&
-                  boardArray[i - 1, j + 1] == CellState.BlackPiece && boardArray[i - 2, j + 2] == CellState.Empty)
+                  (boardArray[i - 1, j + 1] == CellState.BlackPiece || boardArray[i - 1, j + 1] == CellState.BlackKing) && boardArray[i - 2, j + 2] == CellState.Empty)
                 {
                     beats.Add(new Move
                     {
@@ -141,7 +145,7 @@ namespace CheckersBot.Game
             else if (teamPlaying == Team.Black)
             {
                 if (i + 2 <= 7 && j + 2 <= 7 &&
-                    boardArray[i + 1, j + 1] == CellState.WhitePiece && boardArray[i + 2, j + 2] == CellState.Empty)
+                    (boardArray[i + 1, j + 1] == CellState.WhitePiece || boardArray[i + 1, j + 1] == CellState.WhiteKing) && boardArray[i + 2, j + 2] == CellState.Empty)
                 {
                     beats.Add(new Move
                     {
@@ -151,7 +155,7 @@ namespace CheckersBot.Game
                     appendSubsequentBeats(boardArray, teamPlaying, beats);
                 }
                 else if (i - 2 >= 0 && j + 2 <= 7 &&
-                  boardArray[i - 1, j + 1] == CellState.WhitePiece && boardArray[i - 2, j + 2] == CellState.Empty)
+                  (boardArray[i - 1, j + 1] == CellState.WhitePiece || boardArray[i - 1, j + 1] == CellState.WhiteKing) && boardArray[i - 2, j + 2] == CellState.Empty)
                 {
                     beats.Add(new Move
                     {
@@ -161,7 +165,7 @@ namespace CheckersBot.Game
                     appendSubsequentBeats(boardArray, teamPlaying, beats);
                 }
                 else if (i - 2 >= 0 && j - 2 >= 0 &&
-                  boardArray[i - 1, j - 1] == CellState.WhitePiece && boardArray[i - 2, j - 2] == CellState.Empty)
+                  (boardArray[i - 1, j - 1] == CellState.WhitePiece || boardArray[i - 1, j - 1] == CellState.WhiteKing) && boardArray[i - 2, j - 2] == CellState.Empty)
                 {
                     beats.Add(new Move
                     {
@@ -171,7 +175,7 @@ namespace CheckersBot.Game
                     appendSubsequentBeats(boardArray, teamPlaying, beats);
                 }
                 else if (i + 2 <= 7 && j - 2 >= 0 &&
-                  boardArray[i + 1, j - 1] == CellState.WhitePiece && boardArray[i + 2, j - 2] == CellState.Empty)
+                  (boardArray[i + 1, j - 1] == CellState.WhitePiece || boardArray[i + 1, j - 1] == CellState.WhiteKing) && boardArray[i + 2, j - 2] == CellState.Empty)
                 {
                     beats.Add(new Move
                     {

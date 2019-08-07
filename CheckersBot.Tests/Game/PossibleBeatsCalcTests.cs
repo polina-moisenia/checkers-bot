@@ -86,6 +86,74 @@ namespace CheckersBot.Tests.Game
         }
 
         [Test]
+        public void OnePossibleBeatTestBlackWithWhiteKing()
+        {
+            string jsonData = @"{
+                'team': 'b',
+                'field': [
+                    ['.', 'b', '.', 'b', '.', 'b', '.', 'b'],
+                    ['b', '.', 'b', '.', 'b', '.', 'b', '.'],
+                    ['.', 'b', '.', '.', '.', 'b', '.', 'b'],
+                    ['.', '.', 'b', '.', '.', '.', '.', '.'],
+                    ['.', 'W', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', 'w', '.', 'w', '.', 'w', '.'],
+                    ['.', 'w', '.', 'w', '.', 'w', '.', 'w'],
+                    ['w', '.', 'w', '.', 'w', '.', 'w', '.']
+                ] 
+            }";
+            var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
+            {
+                new List<Move>
+                {
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 3},
+                        EndingPoint = new Cell {X = 0, Y = 5}
+                    }
+                }
+            };
+
+            CheckListOfListOfMoves(moves, expectedMoves);
+        }
+
+        [Test]
+        public void OnePossibleBeatTestWhiteWithBlackKing()
+        {
+            string jsonData = @"{
+                'team': 'b',
+                'field': [
+                    ['.', 'b', '.', 'b', '.', 'b', '.', 'b'],
+                    ['b', '.', 'b', '.', 'b', '.', 'b', '.'],
+                    ['.', 'b', '.', '.', '.', 'b', '.', 'b'],
+                    ['.', '.', 'B', '.', '.', '.', '.', '.'],
+                    ['.', 'w', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', 'w', '.', 'w', '.', 'w', '.'],
+                    ['.', 'w', '.', 'w', '.', 'w', '.', 'w'],
+                    ['w', '.', 'w', '.', 'w', '.', 'w', '.']
+                ] 
+            }";
+            var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
+            {
+                new List<Move>
+                {
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 3},
+                        EndingPoint = new Cell {X = 0, Y = 5}
+                    }
+                }
+            };
+
+            CheckListOfListOfMoves(moves, expectedMoves);
+        }
+
+        [Test]
         public void TwoPossibleBeatsTest()
         {
             string jsonData = @"{
