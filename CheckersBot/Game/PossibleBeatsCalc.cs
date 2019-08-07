@@ -46,6 +46,36 @@ namespace CheckersBot.Game
                             appendSubsequentBeats(Clone.CloneJson(boardArray), teamPlaying, beats);
                             possibleBeats.Add(beats);
                         }
+
+                        if (i - 2 >= 0 && j + 2 <= 7 &&
+                            (boardArray[i - 1, j + 1] == CellState.BlackPiece || boardArray[i - 1, j + 1] == CellState.BlackKing) &&
+                            boardArray[i - 2, j + 2] == CellState.Empty)
+                        {
+                            var beats = new List<Move>
+                            {
+                                new Move {
+                                    StartingPoint = new Cell { X = i, Y = j },
+                                    EndingPoint = new Cell { X = i - 2, Y = j + 2 }
+                                }
+                            };
+                            appendSubsequentBeats(Clone.CloneJson(boardArray), teamPlaying, beats);
+                            possibleBeats.Add(beats);
+                        }
+
+                        if (i + 2 <= 7 && j + 2 <= 7 &&
+                            (boardArray[i + 1, j + 1] == CellState.BlackPiece || boardArray[i + 1, j + 1] == CellState.BlackKing) &&
+                            boardArray[i + 2, j + 2] == CellState.Empty)
+                        {
+                            var beats = new List<Move>
+                            {
+                                new Move {
+                                    StartingPoint = new Cell { X = i, Y = j },
+                                    EndingPoint = new Cell { X = i + 2, Y = j + 2 }
+                                }
+                            };
+                            appendSubsequentBeats(Clone.CloneJson(boardArray), teamPlaying, beats);
+                            possibleBeats.Add(beats);
+                        }
                     }
                     else if ((boardArray[i, j] == CellState.BlackPiece || boardArray[i, j] == CellState.BlackKing) && teamPlaying == Team.Black)
                     {
@@ -75,6 +105,38 @@ namespace CheckersBot.Game
                                 {
                                     StartingPoint = new Cell { X = i, Y = j },
                                     EndingPoint = new Cell { X = i - 2, Y = j + 2 }
+                                }
+                            };
+
+                            appendSubsequentBeats(Clone.CloneJson(boardArray), teamPlaying, beats);
+                            possibleBeats.Add(beats);
+                        }
+                        if (i + 2 <= 7 && j - 2 >= 0 &&
+                            (boardArray[i + 1, j - 1] == CellState.WhitePiece || boardArray[i + 1, j - 1] == CellState.WhiteKing)
+                            && boardArray[i + 2, j - 2] == CellState.Empty)
+                        {
+                            var beats = new List<Move>
+                            {
+                                new Move
+                                {
+                                    StartingPoint = new Cell { X = i, Y = j },
+                                    EndingPoint = new Cell { X = i + 2, Y = j - 2 }
+                                }
+                            };
+
+                            appendSubsequentBeats(Clone.CloneJson(boardArray), teamPlaying, beats);
+                            possibleBeats.Add(beats);
+                        }
+                        if (i - 2 >= 0 && j - 2 >= 0 &&
+                            (boardArray[i - 1, j - 1] == CellState.WhitePiece || boardArray[i - 1, j - 1] == CellState.WhiteKing)
+                            && boardArray[i - 2, j - 2] == CellState.Empty)
+                        {
+                            var beats = new List<Move>
+                            {
+                                new Move
+                                {
+                                    StartingPoint = new Cell { X = i, Y = j },
+                                    EndingPoint = new Cell { X = i - 2, Y = j - 2 }
                                 }
                             };
 
