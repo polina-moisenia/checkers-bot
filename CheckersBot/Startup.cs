@@ -1,5 +1,5 @@
-﻿using CheckersBot.Serialization;
-using CheckersBot.Services;
+﻿using CheckersBot.Game;
+using CheckersBot.Serialization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +23,9 @@ namespace CheckersBot
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.TryAddSingleton<ISerializer, JsonSerializerWrapper>();
-            services.TryAddSingleton<IMove, MoveService>();
+            services.TryAddSingleton<INextMovesChooser, NextMovesChooser>();
+            services.TryAddSingleton<IPossibleBeatsCalc, PossibleBeatsCalc>();
+            services.TryAddSingleton<IPossibleMovesCalc, PossibleMovesCalc>();
             services.AddCors(o => o.AddPolicy("AllowAllPolicy", builder =>
             {
                 builder.AllowAnyOrigin()

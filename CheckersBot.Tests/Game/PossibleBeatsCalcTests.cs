@@ -1,26 +1,27 @@
-using System;
-using Xunit;
-using CheckersBot.Services;
+using System.Collections.Generic;
+using CheckersBot.Extensions;
+using CheckersBot.Game;
 using CheckersBot.Models;
 using Newtonsoft.Json;
-using System.Collections.Generic;
+using NUnit.Framework;
 
-namespace CheckersBot.Tests
+namespace CheckersBot.Tests.Game
 {
-    public class GetPossibleBeatsTests
+    public class PossibleBeatsCalcTests : MoveTestBase
     {
-        private readonly MoveService _moveService;
+        private IPossibleBeatsCalc _beatsCalc;
 
-        public GetPossibleBeatsTests()
+        [SetUp]
+        public void SetUp()
         {
-            _moveService = new MoveService();
+            _beatsCalc = new PossibleBeatsCalc();
         }
 
-        [Fact]
+        [Test]
         public void OnePossibleBeatTest()
         {
-            string jsonData = @"{  
-                'team': 'w',  
+            string jsonData = @"{
+                'team': 'w',
                 'field': [
                     ['.', 'b', '.', 'b', '.', 'b', '.', 'b'],
                     ['b', '.', 'b', '.', 'b', '.', 'b', '.'],
@@ -33,8 +34,9 @@ namespace CheckersBot.Tests
                 ] 
             }";
             var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
-            var move = _moveService.GetPossibleBeats(boardModel);
-            var actualMoves = new List<List<Move>>
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
             {
                 new List<Move>
                 {
@@ -46,16 +48,14 @@ namespace CheckersBot.Tests
                 }
             };
 
-            var moveStr = JsonConvert.SerializeObject(move);
-            var actualMovesStr = JsonConvert.SerializeObject(actualMoves);
-            Assert.Equal(moveStr, actualMovesStr);
+            CheckListOfListOfMoves(moves, expectedMoves);
         }
 
-        [Fact]
+        [Test]
         public void OnePossibleBeatTestBlack()
         {
-            string jsonData = @"{  
-                'team': 'b',  
+            string jsonData = @"{
+                'team': 'b',
                 'field': [
                     ['.', 'b', '.', 'b', '.', 'b', '.', 'b'],
                     ['b', '.', 'b', '.', 'b', '.', 'b', '.'],
@@ -68,8 +68,9 @@ namespace CheckersBot.Tests
                 ] 
             }";
             var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
-            var move = _moveService.GetPossibleBeats(boardModel);
-            var actualMoves = new List<List<Move>>
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
             {
                 new List<Move>
                 {
@@ -81,16 +82,14 @@ namespace CheckersBot.Tests
                 }
             };
 
-            var moveStr = JsonConvert.SerializeObject(move);
-            var actualMovesStr = JsonConvert.SerializeObject(actualMoves);
-            Assert.Equal(moveStr, actualMovesStr);
+            CheckListOfListOfMoves(moves, expectedMoves);
         }
 
-        [Fact]
+        [Test]
         public void TwoPossibleBeatsTest()
         {
-            string jsonData = @"{  
-                'team': 'w',  
+            string jsonData = @"{
+                'team': 'w',
                 'field': [
                     ['.', 'b', '.', 'b', '.', 'b', '.', 'b'],
                     ['b', '.', 'b', '.', 'b', '.', 'b', '.'],
@@ -103,8 +102,9 @@ namespace CheckersBot.Tests
                 ] 
             }";
             var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
-            var move = _moveService.GetPossibleBeats(boardModel);
-            var actualMoves = new List<List<Move>>
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
             {
                 new List<Move>
                 {
@@ -124,17 +124,14 @@ namespace CheckersBot.Tests
                 }
             };
 
-            var moveStr = JsonConvert.SerializeObject(move);
-            var actualMovesStr = JsonConvert.SerializeObject(actualMoves);
-            Assert.Equal(moveStr, actualMovesStr);
+            CheckListOfListOfMoves(moves, expectedMoves);
         }
 
-
-        [Fact]
+        [Test]
         public void TwoPlusTwoPossibleBeatsTest()
         {
-            string jsonData = @"{  
-                'team': 'w',  
+            string jsonData = @"{
+                'team': 'w',
                 'field': [
                     ['.', 'b', '.', 'b', '.', 'b', '.', 'b'],
                     ['b', '.', 'b', '.', 'b', '.', 'b', '.'],
@@ -147,8 +144,9 @@ namespace CheckersBot.Tests
                 ] 
             }";
             var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
-            var move = _moveService.GetPossibleBeats(boardModel);
-            var actualMoves = new List<List<Move>>
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
             {
                 new List<Move>
                 {
@@ -178,16 +176,14 @@ namespace CheckersBot.Tests
                 }
             };
 
-            var moveStr = JsonConvert.SerializeObject(move);
-            var actualMovesStr = JsonConvert.SerializeObject(actualMoves);
-            Assert.Equal(moveStr, actualMovesStr);
+            CheckListOfListOfMoves(moves, expectedMoves);
         }
 
-        [Fact]
+        [Test]
         public void TwoPlusThreePossibleBeatsTest()
         {
-            string jsonData = @"{  
-                'team': 'w',  
+            string jsonData = @"{
+                'team': 'w',
                 'field': [
                     ['.', 'b', '.', 'b', '.', 'b', '.', 'b'],
                     ['b', '.', 'b', '.', 'b', '.', 'b', '.'],
@@ -197,11 +193,12 @@ namespace CheckersBot.Tests
                     ['.', '.', 'w', '.', 'w', '.', '.', '.'],
                     ['.', 'w', '.', 'w', '.', 'w', '.', 'w'],
                     ['w', '.', 'w', '.', 'w', '.', 'w', '.']
-                ] 
+                ]
             }";
             var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
-            var move = _moveService.GetPossibleBeats(boardModel);
-            var actualMoves = new List<List<Move>>
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
             {
                 new List<Move>
                 {
@@ -236,9 +233,7 @@ namespace CheckersBot.Tests
                 }
             };
 
-            var moveStr = JsonConvert.SerializeObject(move);
-            var actualMovesStr = JsonConvert.SerializeObject(actualMoves);
-            Assert.Equal(moveStr, actualMovesStr);
+            CheckListOfListOfMoves(moves, expectedMoves);
         }
     }
 }

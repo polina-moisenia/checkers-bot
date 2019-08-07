@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using CheckersBot.Game;
 using CheckersBot.Models;
 using CheckersBot.Serialization;
-using CheckersBot.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -13,29 +13,21 @@ namespace CheckersBot.Controllers
     public class MoveController : ControllerBase
     {
         private readonly ISerializer _serializer;
-        private readonly IMove _move;
+        private readonly INextMovesChooser _nextMovesChooser;
 
-        public MoveController(ISerializer serializer, IMove moveService)
+        public MoveController(ISerializer serializer, INextMovesChooser nextMovesChooserService)
         {
             _serializer = serializer;
-            _move = moveService;
+            _nextMovesChooser = nextMovesChooserService;
         }
 
         [EnableCors("AllowAllPolicy")]
         [HttpPost]
         public IActionResult Post([FromBody] BoardModel board)
         {
-            //var nextMove = _move.GetNextMove(board);
-            var nextMove = new List<Move>
-            {
-                new Move
-                {
-                    StartingPoint = new Cell {X = 0, Y = 5},
-                    EndingPoint = new Cell {X = 1, Y = 4},
-                }
-            };
+            var nextMoves = _nextMovesChooser.GetNextMove(board);
 
-            var response = Content(_serializer.Serialize(nextMove), "application/json");
+            var response = Content(_serializer.Serialize(nextMoves), "application/json");
             response.StatusCode = StatusCodes.Status200OK;
 
             return response;
