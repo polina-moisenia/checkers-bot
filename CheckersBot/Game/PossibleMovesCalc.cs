@@ -5,9 +5,9 @@ namespace CheckersBot.Game
 {
     public class PossibleMovesCalc : IPossibleMovesCalc
     {
-        public List<Move> GetPossibleMoves(CellState[,] board, Team teamPlaying)
+        public List<List<Move>> GetPossibleMoves(CellState[,] board, Team teamPlaying)
         {
-            var possibleMoves = new List<Move>();
+            var possibleMoves = new List<List<Move>>();
 
             int verticalIncrement = teamPlaying == Team.White ? -1 : 1;
             var increments = new List<Cell>
@@ -34,7 +34,7 @@ namespace CheckersBot.Game
 
                             if (ValidMove(nextMove, board))
                             {
-                                possibleMoves.Add(nextMove);
+                                possibleMoves.Add(new List<Move>{nextMove});
                             }
                         }
 
@@ -51,7 +51,7 @@ namespace CheckersBot.Game
                                 StartingPoint = new Cell {X = i, Y = j},
                                 EndingPoint = new Cell {X = i + diff, Y = j + diff}
                             };
-                            possibleMoves.Add(nextMove);
+                            possibleMoves.Add(new List<Move> { nextMove });
                             diff++;
                         }
 
@@ -63,7 +63,7 @@ namespace CheckersBot.Game
                                 StartingPoint = new Cell {X = i, Y = j},
                                 EndingPoint = new Cell {X = i - diff, Y = j - diff}
                             };
-                            possibleMoves.Add(nextMove);
+                            possibleMoves.Add(new List<Move> { nextMove });
                             diff++;
                         }
 
@@ -75,7 +75,7 @@ namespace CheckersBot.Game
                                 StartingPoint = new Cell {X = i, Y = j},
                                 EndingPoint = new Cell {X = i + diff, Y = j - diff}
                             };
-                            possibleMoves.Add(nextMove);
+                            possibleMoves.Add(new List<Move> { nextMove });
                             diff++;
                         }
 
@@ -87,7 +87,7 @@ namespace CheckersBot.Game
                                 StartingPoint = new Cell {X = i, Y = j},
                                 EndingPoint = new Cell {X = i - diff, Y = j + diff}
                             };
-                            possibleMoves.Add(nextMove);
+                            possibleMoves.Add(new List<Move> { nextMove });
                             diff++;
                         }
                     }

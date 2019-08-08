@@ -36,46 +36,67 @@ namespace CheckersBot.Tests.Game
             var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
             var moves = _movesCalc.GetPossibleMoves(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
 
-            var expectedMoves = new List<Move>
+            var expectedMoves = new List<List<Move>>
             {
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 1, Y = 4},
-                    StartingPoint = new Cell {X = 0, Y = 5}
+                    new Move
+                    {
+                        EndingPoint = new Cell {X = 1, Y = 4},
+                        StartingPoint = new Cell {X = 0, Y = 5}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 1, Y = 4},
-                    StartingPoint = new Cell {X = 2, Y = 5}
+                    new Move
+                    {
+                        EndingPoint = new Cell {X = 3, Y = 4},
+                        StartingPoint = new Cell {X = 2, Y = 5}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 3, Y = 4},
-                    StartingPoint = new Cell {X = 2, Y = 5}
+                    new Move
+                    {
+                        EndingPoint = new Cell {X = 1, Y = 4},
+                        StartingPoint = new Cell {X = 2, Y = 5}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 3, Y = 4},
-                    StartingPoint = new Cell {X = 4, Y = 5}
+                    new Move
+                    {
+                        EndingPoint = new Cell {X = 5, Y = 4},
+                        StartingPoint = new Cell {X = 4, Y = 5}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 5, Y = 4},
-                    StartingPoint = new Cell {X = 4, Y = 5}
+                    new Move
+                    {
+                        EndingPoint = new Cell {X = 3, Y = 4},
+                        StartingPoint = new Cell {X = 4, Y = 5}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 5, Y = 4},
-                    StartingPoint = new Cell {X = 6, Y = 5}
+                    new Move
+                    {
+                        EndingPoint = new Cell {X = 7, Y = 4},
+                        StartingPoint = new Cell {X = 6, Y = 5}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 7, Y = 4},
-                    StartingPoint = new Cell {X = 6, Y = 5}
+                    new Move
+                    {
+                        EndingPoint = new Cell {X = 5, Y = 4},
+                        StartingPoint = new Cell {X = 6, Y = 5}
+                    }
                 }
             };
 
-            CheckListOfMoves(moves, expectedMoves);
+            CheckListOfListOfMoves(moves, expectedMoves);
         }
 
         [Test]
@@ -97,51 +118,75 @@ namespace CheckersBot.Tests.Game
             var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
             var moves = _movesCalc.GetPossibleMoves(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
 
-            var expectedMoves = new List<Move>
+            var expectedMoves = new List<List<Move>>
             {
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 0, Y = 4},
-                    StartingPoint = new Cell {X = 1, Y = 3}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 1, Y = 2},
+                        EndingPoint = new Cell {X = 2, Y = 3}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 3, Y = 4},
-                    StartingPoint = new Cell {X = 1, Y = 3}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 1, Y = 2},
+                        EndingPoint = new Cell {X = 0, Y = 3}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 3, Y = 2},
-                    StartingPoint = new Cell {X = 2, Y = 1}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 1},
+                        EndingPoint = new Cell {X = 3, Y = 2}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 3, Y = 2},
-                    StartingPoint = new Cell {X = 4, Y = 1}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 4, Y = 1},
+                        EndingPoint = new Cell {X = 3, Y = 2}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 4, Y = 3},
-                    StartingPoint = new Cell {X = 3, Y = 4}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 4, Y = 3},
+                        EndingPoint = new Cell {X = 5, Y = 4}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 4, Y = 3},
-                    StartingPoint = new Cell {X = 5, Y = 4}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 4, Y = 3},
+                        EndingPoint = new Cell {X = 3, Y = 4}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 5, Y = 2},
-                    StartingPoint = new Cell {X = 6, Y = 3}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 5, Y = 2},
+                        EndingPoint = new Cell {X = 6, Y = 3}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 5, Y = 2},
-                    StartingPoint = new Cell {X = 6, Y = 2}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 7, Y = 2},
+                        EndingPoint = new Cell {X = 6, Y = 3}
+                    }
                 }
             };
 
-            CheckListOfMoves(moves, expectedMoves);
+            CheckListOfListOfMoves(moves, expectedMoves);
         }
 
         [Test]
@@ -163,36 +208,51 @@ namespace CheckersBot.Tests.Game
             var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
             var moves = _movesCalc.GetPossibleMoves(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
 
-            var expectedMoves = new List<Move>
+            var expectedMoves = new List<List<Move>>
             {
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 5, Y = 3},
-                    StartingPoint = new Cell {X = 4, Y = 2}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 5, Y = 2},
+                        EndingPoint = new Cell {X = 6, Y = 3}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 5, Y = 3},
-                    StartingPoint = new Cell {X = 4, Y = 4}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 5, Y = 2},
+                        EndingPoint = new Cell {X = 7, Y = 4}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 5, Y = 3},
-                    StartingPoint = new Cell {X = 3, Y = 5}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 5, Y = 2},
+                        EndingPoint = new Cell {X = 4, Y = 1}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 5, Y = 3},
-                    StartingPoint = new Cell {X = 6, Y = 4}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 5, Y = 2},
+                        EndingPoint = new Cell {X = 4, Y = 3}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    EndingPoint = new Cell {X = 5, Y = 3},
-                    StartingPoint = new Cell {X = 7, Y = 5}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 5, Y = 2},
+                        EndingPoint = new Cell {X = 3, Y = 4}
+                    }
                 }
             };
 
-            CheckListOfMoves(moves, expectedMoves);
+            CheckListOfListOfMoves(moves, expectedMoves);
         }
 
         [Test]
@@ -214,46 +274,67 @@ namespace CheckersBot.Tests.Game
             var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
             var moves = _movesCalc.GetPossibleMoves(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
 
-            var expectedMoves = new List<Move>
+            var expectedMoves = new List<List<Move>>
             {
-                new Move
+                new List<Move>
                 {
-                    StartingPoint = new Cell {X = 2, Y = 7},
-                    EndingPoint = new Cell {X = 1, Y = 6}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 7},
+                        EndingPoint = new Cell {X = 1, Y = 6}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    StartingPoint = new Cell {X = 2, Y = 7},
-                    EndingPoint = new Cell {X = 0, Y = 5}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 7},
+                        EndingPoint = new Cell {X = 0, Y = 5}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    StartingPoint = new Cell {X = 2, Y = 7},
-                    EndingPoint = new Cell {X = 3, Y = 6}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 7},
+                        EndingPoint = new Cell {X = 3, Y = 6}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    StartingPoint = new Cell {X = 2, Y = 7},
-                    EndingPoint = new Cell {X = 4, Y = 5}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 7},
+                        EndingPoint = new Cell {X = 4, Y = 5}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    StartingPoint = new Cell {X = 2, Y = 7},
-                    EndingPoint = new Cell {X = 5, Y = 4}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 7},
+                        EndingPoint = new Cell {X = 5, Y = 4}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    StartingPoint = new Cell {X = 2, Y = 7},
-                    EndingPoint = new Cell {X = 6, Y = 3}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 7},
+                        EndingPoint = new Cell {X = 6, Y = 3}
+                    }
                 },
-                new Move
+                new List<Move>
                 {
-                    StartingPoint = new Cell {X = 2, Y = 7},
-                    EndingPoint = new Cell {X = 7, Y = 2}
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 7},
+                        EndingPoint = new Cell {X = 7, Y = 2}
+                    }
                 }
             };
 
-            CheckListOfMoves(moves, expectedMoves);
+            CheckListOfListOfMoves(moves, expectedMoves);
         }
     }
 }
