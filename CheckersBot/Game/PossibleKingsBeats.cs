@@ -1,4 +1,5 @@
-﻿using CheckersBot.Models;
+﻿using CheckersBot.Extensions;
+using CheckersBot.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,52 +11,28 @@ namespace CheckersBot.Game
     {
         internal static List<List<Move>> GetPossibleKingsBeats(CellState[,] boardArray, Team teamPlaying)
         {
-            List<List<Move>> possibleBeats = new List<List<Move>>();
+            var kings = new List<Cell>();
+            var possibleBeats = new List<List<Move>>();
+
 
             for (int i = 0; i < 8; i++)
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if (boardArray[i, j] == CellState.WhiteKing && teamPlaying == Team.White)
+                    if (boardArray[i, j] == CellState.WhiteKing && teamPlaying == Team.White ||
+                        boardArray[i, j] == CellState.BlackKing && teamPlaying == Team.Black)
                     {
-                        // if top diagonal with empty add start move, and check the last one
-                        Cell opponentCoordinates = null;
-                        for (var count = 1; i + count <= 7 && j - count >= 0; count++)
-                        {
-                            if (boardArray[i + count, j - count] == CellState.BlackKing || boardArray[i + count, j - count] == CellState.BlackPiece)
-                            {
-                                opponentCoordinates = new Cell { X = i + count, Y = j - count };
-                                break;
-                            }
-                        }
-
-                        if (opponentCoordinates != null)
-                        {
-                            for (var count = 1; opponentCoordinates.X + count <= 7 && opponentCoordinates.Y - count >= 0; count++)
-                            {
-                                if (boardArray[opponentCoordinates.X + count, opponentCoordinates.Y - count] == CellState.Empty)
-                                {
-                                    //opponentCoordinates = new Cell { X = i + count, Y = j - count };
-
-                                    possibleBeats.Add(new List<Move>
-                                    {
-                                        new Move
-                                        {
-                                            StartingPoint = new Cell {X = i, Y = j},
-                                            EndingPoint = new Cell {X = opponentCoordinates.X + count, Y = opponentCoordinates.Y - count}
-                                        }
-                                    });
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                    else if (boardArray[i, j] == CellState.BlackKing && teamPlaying == Team.Black)
-                    {
-
+                        kings.Add(new Cell { X = i, Y = j });
                     }
                 }
             }
+
+            kings.ForEach((king) =>
+            {
+                possibleBeats.Add(GetIndividualKingBeats(king, boardArray, teamPlaying, new List<Move>()));
+            });
+
+            return possibleBeats.OrderByDescending(x => x.Count()).Take(1).ToList();
 
             // possibleBeats.Add(new List<Move> { });
             // дерево
@@ -66,7 +43,60 @@ namespace CheckersBot.Game
             // 5 для каждой из клеток повторить с пункта 1 до 5
 
             // выбрать самый длинный ход из доступных для текущего короля и вернуть его
-            return possibleBeats;
+        }
+
+        private static List<Move> GetIndividualKingBeats(Cell king, CellState[,] boardArray, Team teamPlaying, List<Move> beats)
+        {
+            var clonedBeats = Clone.CloneJson(beats);
+            var possibleGoTos = new List<Cell>();
+            // TODO: 3 more times
+            for (var count = 1; king.X + count <= 7 && king.Y - count >= 0; count++)
+            {
+                if ((boardArray[king.X + count, king.Y - count] == CellState.BlackKing && teamPlaying == Team.White) ||
+                    (boardArray[king.X + count, king.Y - count] == CellState.BlackPiece && teamPlaying == Team.White) ||
+                    (boardArray[king.X + count, king.Y - count] == CellState.WhiteKing && teamPlaying == Team.Black) ||
+                    (boardArray[king.X + count, king.Y - count] == CellState.WhitePiece && teamPlaying == Team.Black))
+                {
+                    count++;
+                    for (; king.X + count <= 7 && king.Y - count >= 0; count++)
+                    {
+                        if (boardArray[king.X + count, king.Y - count] == CellState.Empty)
+                        {
+                            possibleGoTos.Add(new Cell
+                            {
+                                X = king.X + count,
+                                Y = king.Y - count,
+                            });
+                        }
+                    }
+
+                    break;
+                }
+            }
+
+            if (possibleGoTos.Count == 0) return new List<Move>();
+
+            List<List<Move>> possibleBeats = new List<List<Move>>();
+            possibleGoTos.ForEach((possibleGoTo) =>
+            {
+                var move = new Move
+                {
+                    StartingPoint = king,
+                    EndingPoint = possibleGoTo,
+                };
+
+                // TODO: update from kings moves
+                var newBoardArray = BoardExtensions.UpdateFromMoves(boardArray, new List<Move>() { move });
+
+                var beatsList = new List<Move>();
+                beatsList.Add(move);
+                var newBeats = GetIndividualKingBeats(king, newBoardArray, teamPlaying, beatsList);
+                beatsList.AddRange(newBeats);
+                possibleBeats.Add(beatsList);
+            });
+
+            clonedBeats.AddRange(possibleBeats.OrderByDescending(x => x.Count()).First());
+            return clonedBeats;
         }
     }
 }
