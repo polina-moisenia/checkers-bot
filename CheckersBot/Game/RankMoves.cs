@@ -22,14 +22,14 @@ namespace CheckersBot.Game
 
                 var rank = 0;
 
-                rank += move.Count;
+                rank += move.Count > 1 ? move.Count * 2 : 0;
 
                 if (firstPosition.X + 1 < 8 && firstPosition.Y + 1 < 8 && enemies.Contains(updatedBoard[firstPosition.X + 1, firstPosition.Y + 1]) ||
                     firstPosition.X + 1 < 8 && firstPosition.Y - 1 >= 0 && enemies.Contains(updatedBoard[firstPosition.X + 1, firstPosition.Y - 1]) ||
                     firstPosition.X - 1 >= 0 && firstPosition.Y - 1 >= 0 && enemies.Contains(updatedBoard[firstPosition.X - 1, firstPosition.Y - 1]) ||
                     firstPosition.X - 1 >= 0 && firstPosition.Y + 1 < 8 && enemies.Contains(updatedBoard[firstPosition.X - 1, firstPosition.Y + 1]))
                 {
-                    rank += 2;
+                    rank += 3;
                 }
 
                 if (endPosition.X + 1 < 8 && endPosition.Y + 1 < 8 && enemies.Contains(updatedBoard[endPosition.X + 1, endPosition.Y + 1]) ||
@@ -37,7 +37,7 @@ namespace CheckersBot.Game
                     endPosition.X - 1 >= 0 && endPosition.Y - 1 >= 0 && enemies.Contains(updatedBoard[endPosition.X - 1, endPosition.Y - 1]) ||
                     endPosition.X - 1 >= 0 && endPosition.Y + 1 < 8 && enemies.Contains(updatedBoard[endPosition.X - 1, endPosition.Y + 1]))
                 {
-                    rank--;
+                    rank -= 3;
                 }
 
                 if (team == Team.White)
@@ -52,11 +52,17 @@ namespace CheckersBot.Game
                         rank++;
                 }
 
-                if (firstPosition.X < endPosition.X && firstPosition.X < 5)
+                if (firstPosition.X < endPosition.X && firstPosition.X < 2)
                     rank++;
+
+                if (firstPosition.X > endPosition.X && firstPosition.X < 2)
+                    rank--;
 
                 if (firstPosition.X > endPosition.X && firstPosition.X > 5)
                     rank++;
+
+                if (firstPosition.X < endPosition.X && firstPosition.X > 5)
+                    rank--;
 
                 ranks.Add(new MoveRank { Rank = rank, Move = move});
             }
