@@ -43,7 +43,7 @@ namespace CheckersBot.Tests.Game
                     new Move
                     {
                         StartingPoint = new Cell {X = 0, Y = 7},
-                        EndingPoint = new Cell {X = 2, Y = 4}
+                        EndingPoint = new Cell {X = 3, Y = 4}
                     }
                 }
             };

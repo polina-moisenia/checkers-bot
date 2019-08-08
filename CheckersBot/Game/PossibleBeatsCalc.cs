@@ -147,8 +147,7 @@ namespace CheckersBot.Game
                 }
             }
 
-            PossibleKingsBeats.GetPossibleKingsBeats(boardArray, teamPlaying, possibleBeats);
-
+            possibleBeats.AddRange(PossibleKingsBeats.GetPossibleKingsBeats(boardArray, teamPlaying));
 
             return possibleBeats;
         }
