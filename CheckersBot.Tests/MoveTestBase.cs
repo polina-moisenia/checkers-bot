@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using CheckersBot.Models;
 using Newtonsoft.Json;
 using NUnit.Framework;
