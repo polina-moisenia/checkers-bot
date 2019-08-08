@@ -34,8 +34,10 @@ namespace CheckersBot.Extensions
                 updatedBoard[move.StartingPoint.X, move.StartingPoint.Y] = CellState.Empty;
                 if (Math.Abs(move.EndingPoint.X - move.StartingPoint.X) > 1)
                 {
-                    updatedBoard[(move.StartingPoint.X + move.EndingPoint.X) / 2, (move.StartingPoint.Y + move.EndingPoint.Y) / 2] =
-                        CellState.Empty;
+                    var xDiff = move.EndingPoint.X - move.StartingPoint.X > 0 ? -1 : 1;
+                    var yDiff = move.EndingPoint.Y - move.StartingPoint.Y > 0 ? -1 : 1;
+
+                    updatedBoard[move.EndingPoint.X + xDiff, move.EndingPoint.Y + yDiff] = CellState.Empty;
                 }
 
                 if (move.EndingPoint.Y == 0 && check == CellState.WhitePiece)
