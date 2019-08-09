@@ -56,7 +56,7 @@ namespace CheckersBot.Tests.Game
 
             _weigher = new Mock<IGetMoveWeight>();
             _weigher.Setup(w =>
-                w.CalculateMoveWeight(It.IsAny<List<Move>>(), It.IsAny<CellState[,]>(), It.IsAny<CellState[,]>(), It.IsAny<Team>(), true)).Returns(1);
+                w.CalculateMoveWeight(It.IsAny<List<Move>>(), It.IsAny<CellState[,]>(), It.IsAny<CellState[,]>(), It.IsAny<Team>(), true)).Returns((1, 1));
 
             string jsonData = @"{
                 'team': 'w',

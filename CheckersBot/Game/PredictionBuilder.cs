@@ -41,22 +41,27 @@ namespace CheckersBot.Game
                 if (beat.Count > 0)
                 {
                     var updatedBoard = boardNext.UpdateFromMoves(beat);
-                    var weight = _getMoveWeight.CalculateMoveWeight(beat, boardNext, updatedBoard, teamNext, true);
+                    var rank = _getMoveWeight.CalculateMoveWeight(beat, boardNext, updatedBoard, teamNext, true);
 
-                    var nodeNext = new PredictionNode
-                    {
-                        InitialMoves = node.InitialMoves,
-                        NextTeam = teamNext.GetNextTeam(),
-                        NextBoard = updatedBoard,
-                        Depth = depth,
-                        AccumulatedWeight = node.AccumulatedWeight + (teamNext == teamPlaying ? +weight : -weight)
-                    };
+                    if (rank.stats > -2) {
 
-                    if (depth == predictionDepth && toKill == 0)
-                        nextPossibilities.Add(nodeNext);
+                        var nodeNext = new PredictionNode
+                        {
+                            InitialMoves = node.InitialMoves,
+                            NextTeam = teamNext.GetNextTeam(),
+                            NextBoard = updatedBoard,
+                            Depth = depth,
+                            AccumulatedWeight = node.AccumulatedWeight + (teamNext == teamPlaying ? +rank.weight : -rank.weight),
+                            StatsForPlayer = teamNext == teamPlaying ? +rank.weight : -rank.weight
+                        };
 
-                    if (depth < predictionDepth && toKill > 0)
-                        nextPossibilities.AddRange(GetDepthwisePrediction(nodeNext, teamPlaying, predictionDepth, token));
+                        if (depth == predictionDepth || toKill == 0)
+                            nextPossibilities.Add(nodeNext);
+
+                        if (depth < predictionDepth && toKill > 0)
+                            nextPossibilities.AddRange(GetDepthwisePrediction(nodeNext, teamPlaying, predictionDepth,
+                                token));
+                    }
                 }
             }
 
@@ -67,7 +72,7 @@ namespace CheckersBot.Game
                     throw new TaskCanceledException();
 
                 var updatedBoard = boardNext.UpdateFromMoves(move);
-                var weight = _getMoveWeight.CalculateMoveWeight(move, boardNext, updatedBoard, teamNext);
+                var rank = _getMoveWeight.CalculateMoveWeight(move, boardNext, updatedBoard, teamNext);
 
                 var nodeNext = new PredictionNode
                 {
@@ -75,7 +80,8 @@ namespace CheckersBot.Game
                     NextTeam = teamNext.GetNextTeam(),
                     NextBoard = updatedBoard,
                     Depth = depth,
-                    AccumulatedWeight = node.AccumulatedWeight + (teamNext == teamPlaying ? +weight : -weight)
+                    AccumulatedWeight = node.AccumulatedWeight + (teamNext == teamPlaying ? +rank.weight : -rank.weight),
+                    StatsForPlayer = teamNext == teamPlaying ? +rank.weight : -rank.weight
                 };
 
                 if (depth == predictionDepth)
