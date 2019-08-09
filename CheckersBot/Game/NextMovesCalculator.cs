@@ -91,7 +91,7 @@ namespace CheckersBot.Game
             //var topPredictionsByStat = predictions.FindAll(p => p.StatsForPlayer == topStat);
 
             var topWeight = predictions.Max(p => p.AccumulatedWeight);
-            var topPredictionsByWeight = predictions.FindAll(p => (topWeight - p.AccumulatedWeight) <= 2);
+            var topPredictionsByWeight = predictions.FindAll(p => topWeight - p.AccumulatedWeight <= 2);
 
             return topPredictionsByWeight[_random.Next(0, topPredictionsByWeight.Count - 1)].InitialMoves;
         }
