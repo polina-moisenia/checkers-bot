@@ -60,6 +60,10 @@ namespace CheckersBot.Game
                     count++;
                     for (; king.X + count <= 7 && king.Y - count >= 0; count++)
                     {
+                        if (boardArray[king.X + count, king.Y - count] != CellState.Empty)
+                        {
+                            break;
+                        }
                         if (boardArray[king.X + count, king.Y - count] == CellState.Empty)
                         {
                             possibleGoTos.Add(new Cell
@@ -84,6 +88,10 @@ namespace CheckersBot.Game
                     count++;
                     for (; king.X - count >= 0 && king.Y - count >= 0; count++)
                     {
+                        if (boardArray[king.X - count, king.Y - count] != CellState.Empty)
+                        {
+                            break;
+                        }
                         if (boardArray[king.X - count, king.Y - count] == CellState.Empty)
                         {
                             possibleGoTos.Add(new Cell
@@ -108,6 +116,10 @@ namespace CheckersBot.Game
                     count++;
                     for (; king.X - count >= 0 && king.Y + count <= 7; count++)
                     {
+                        if (boardArray[king.X - count, king.Y + count] != CellState.Empty)
+                        {
+                            break;
+                        }
                         if (boardArray[king.X - count, king.Y + count] == CellState.Empty)
                         {
                             possibleGoTos.Add(new Cell
@@ -132,6 +144,10 @@ namespace CheckersBot.Game
                     count++;
                     for (; king.X + count <= 7 && king.Y + count <= 7; count++)
                     {
+                        if (boardArray[king.X + count, king.Y + count] != CellState.Empty)
+                        {
+                            break;
+                        }
                         if (boardArray[king.X + count, king.Y + count] == CellState.Empty)
                         {
                             possibleGoTos.Add(new Cell

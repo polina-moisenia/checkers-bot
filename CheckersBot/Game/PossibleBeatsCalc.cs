@@ -148,7 +148,7 @@ namespace CheckersBot.Game
 
             possibleBeats.AddRange(PossibleKingsBeats.GetPossibleKingsBeats(boardArray, teamPlaying));
 
-            return possibleBeats;
+            return possibleBeats.FindAll((possibleBeat) => possibleBeat.Count > 0);
         }
 
         private void appendSubsequentBeats(CellState[,] boardArray, Team teamPlaying, List<Move> beats)
