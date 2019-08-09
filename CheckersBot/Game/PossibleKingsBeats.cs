@@ -163,7 +163,7 @@ namespace CheckersBot.Game
                 beatsList.Add(move);
                 var newBeats = GetIndividualKingBeats(possibleGoTo, newBoardArray, teamPlaying, beatsList);
                 if (newBeats.Count > 1) {
-                    beatsList.AddRange(newBeats);
+                    beatsList = newBeats;
                 }
                 possibleBeats.Add(beatsList);
             });
