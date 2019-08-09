@@ -45,7 +45,17 @@ namespace CheckersBot.Game
 
             if (beats.Count > 0)
             {
-                return beats[_random.Next(0, beats.Count - 1)];
+                var index = _random.Next(0, beats.Count - 1);
+                var random = beats[index];
+                
+                while (random.Count == 0)
+                {
+                    beats.RemoveAt(index);
+                    index = _random.Next(0, beats.Count - 1);
+                    random = beats[index];
+                }
+
+                return random;
             }
             return moves[_random.Next(0, moves.Count - 1)];
         }
