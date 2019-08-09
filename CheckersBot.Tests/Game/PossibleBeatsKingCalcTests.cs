@@ -330,5 +330,33 @@ namespace CheckersBot.Tests.Game
 
             CheckListOfListOfMoves(moves, expectedMoves);
         }
+
+
+        [Test]
+        public void NoBeatsTwoInARow()
+        {
+            string jsonData = @"{
+                'team': 'B',
+                'field': [
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', 'w', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', 'w', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', 'B', '.']
+                ] 
+            }";
+            var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
+            {
+                
+            };
+
+            CheckListOfListOfMoves(moves, expectedMoves);
+        }
     }
 }
