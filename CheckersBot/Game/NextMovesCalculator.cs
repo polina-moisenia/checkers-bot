@@ -36,14 +36,15 @@ namespace CheckersBot.Game
                         if (updatedBoard.CountEnemies(team) == 0)
                             return beat;
 
+                        var ranking = _getMoveWeight.CalculateMoveWeight(beat, board, updatedBoard, team);
                         var node = new PredictionNode
                         {
                             InitialMoves = beat,
                             NextTeam = team.GetNextTeam(),
                             NextBoard = updatedBoard,
                             Depth = 0,
-                            AccumulatedWeight =
-                                _getMoveWeight.CalculateMoveWeight(beat, board, updatedBoard, team, true)
+                            AccumulatedWeight = ranking.weight,
+                            StatsForPlayer = ranking.stats
                         };
 
                         firstPredictions.Add(node);
@@ -57,6 +58,7 @@ namespace CheckersBot.Game
                         throw new TaskCanceledException();
 
                     var updatedBoard = board.UpdateFromMoves(move);
+                    var ranking = _getMoveWeight.CalculateMoveWeight(move, board, updatedBoard, team);
 
                     var node = new PredictionNode
                     {
@@ -64,17 +66,15 @@ namespace CheckersBot.Game
                         NextTeam = team.GetNextTeam(),
                         NextBoard = updatedBoard,
                         Depth = 0,
-                        AccumulatedWeight = _getMoveWeight.CalculateMoveWeight(move, board, updatedBoard, team)
+                        AccumulatedWeight = ranking.weight,
+                        StatsForPlayer = ranking.stats
                     };
 
                     firstPredictions.Add(node);
                     predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
                 }
 
-                var count = predictions.Count;
-                var topBeats = predictions.OrderByDescending(r => r.AccumulatedWeight).Take(3).ToList();
-                var countTop = topBeats.Count < count ? topBeats.Count : count;
-                return topBeats[_random.Next(0, countTop - 1)].InitialMoves;
+                return GetBestForRandom(predictions);
             }
 
             catch (TaskCanceledException)
@@ -82,9 +82,18 @@ namespace CheckersBot.Game
                 Console.WriteLine("Task cancelled");
             }
 
-            var bestFirstPredictions = firstPredictions.OrderByDescending(r => r.AccumulatedWeight).Take(5).Select(r => r.InitialMoves).ToList();
-            var countFirstBest = bestFirstPredictions.Count < firstPredictions.Count ? bestFirstPredictions.Count : firstPredictions.Count;
-            return bestFirstPredictions[_random.Next(0, countFirstBest - 1)];
+            return GetBestForRandom(firstPredictions);
+        }
+
+        private List<Move> GetBestForRandom(List<PredictionNode> predictions)
+        {
+            //var topStat = predictions.Max(p => p.StatsForPlayer);
+            //var topPredictionsByStat = predictions.FindAll(p => p.StatsForPlayer == topStat);
+
+            var topWeight = predictions.Max(p => p.AccumulatedWeight);
+            var topPredictionsByWeight = predictions.FindAll(p => topWeight - p.AccumulatedWeight <= 2);
+
+            return topPredictionsByWeight[_random.Next(0, topPredictionsByWeight.Count - 1)].InitialMoves;
         }
     }
 }

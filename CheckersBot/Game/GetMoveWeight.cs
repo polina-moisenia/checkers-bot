@@ -7,16 +7,18 @@ namespace CheckersBot.Game
 {
     public class GetMoveWeight : IGetMoveWeight
     {
-        public int CalculateMoveWeight(List<Move> moves, CellState[,] boardBefore, CellState[,] boardAfter, Team team, bool isBeat = false)
+        public (int weight, int stats) CalculateMoveWeight(List<Move> moves, CellState[,] boardBefore, CellState[,] boardAfter, Team team, bool isBeat = false)
         {
             var weight = 0;
             var initStat = boardBefore.GetBoardStats();
             var endStat = boardAfter.GetBoardStats();
 
+            var stats = GetRankFromBoard(team, endStat);
+
             if (isBeat)
             {
                 if (boardAfter.CountEnemies(team) == 0)
-                    return 100;
+                    return (100, stats);
                 weight += moves.Count * 5;
 
                 if (initStat.BlackKings > endStat.BlackKings && team == Team.White)
@@ -100,7 +102,16 @@ namespace CheckersBot.Game
             if (firstPosition.X < endPosition.X && firstPosition.X > 5)
                 weight++;
 
-            return weight;
+            return (weight, stats);
+        }
+
+        private int GetRankFromBoard(Team team, GameStats stats)
+        {
+            var blackStats = stats.BlackPieces + stats.BlackKings * 3;
+            var whiteStats = stats.WhitePieces + stats.WhiteKings * 3;
+            var rank = blackStats - whiteStats;
+
+            return team == Team.Black ? rank : -rank;
         }
     }
 }

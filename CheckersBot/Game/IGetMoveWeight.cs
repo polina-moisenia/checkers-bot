@@ -5,6 +5,6 @@ namespace CheckersBot.Game
 {
     public interface IGetMoveWeight
     {
-        int CalculateMoveWeight(List<Move> moves, CellState[,] boardBefore, CellState[,] boardAfter, Team team, bool isBeat = false);
+         (int weight, int stats) CalculateMoveWeight(List<Move> moves, CellState[,] boardBefore, CellState[,] boardAfter, Team team, bool isBeat = false);
     }
 }
