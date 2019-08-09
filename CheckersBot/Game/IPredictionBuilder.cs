@@ -6,6 +6,6 @@ namespace CheckersBot.Game
 {
     public interface IPredictionBuilder
     {
-        List<PredictionNode> GetDepthwisePrediction(PredictionNode node, int depth, CancellationToken token);
+        List<PredictionNode> GetDepthwisePrediction(PredictionNode node, Team teamPlaying, int depth, CancellationToken token);
     }
 }

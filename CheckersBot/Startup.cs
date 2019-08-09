@@ -24,7 +24,7 @@ namespace CheckersBot
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.TryAddSingleton<ISerializer, JsonSerializerWrapper>();
             services.TryAddSingleton<IGetNextMoves, GetNextMoves>();
-            services.TryAddSingleton<IRankMoves, RankMoves>();
+            services.TryAddSingleton<IGetMoveWeight, GetMoveWeight>();
             services.TryAddSingleton<IPredictionBuilder, PredictionBuilder>();
             services.TryAddSingleton<INextMovesCalculator, NextMovesCalculator>();
             services.TryAddSingleton<IPossibleBeatsCalc, PossibleBeatsCalc>();

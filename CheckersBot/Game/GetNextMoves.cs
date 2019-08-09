@@ -30,16 +30,16 @@ namespace CheckersBot.Game
             var moves = _movesCalc.GetPossibleMoves(board, team);
 
             //TODO comment out if won't work
-            using (var cancellationTokenSource = new CancellationTokenSource(4800))
+            using (var cancellationTokenSource = new CancellationTokenSource(4700))
             {
                 try
                 {
                     var calcNextMoves = _nextMovesCalculator.GetCalculatedNextMoves(board, team, beats, moves, cancellationTokenSource.Token);
                     return calcNextMoves;
                 }
-                catch (TaskCanceledException)
+                catch (Exception)
                 {
-                    Console.WriteLine("Task was cancelled");
+                    Console.WriteLine("Ooops");
                 }
             }
 
