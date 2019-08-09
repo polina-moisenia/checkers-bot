@@ -22,53 +22,65 @@ namespace CheckersBot.Game
 
         public List<Move> GetCalculatedNextMoves(CellState[,] board, Team team, List<List<Move>> beats, List<List<Move>> moves, CancellationToken token)
         {
-            var predictions = new List<PredictionNode>();
+            var firstPredictions = new List<PredictionNode>();
 
-            foreach (var beat in beats)
+            try
             {
-                if (token.IsCancellationRequested)
-                    throw new TaskCanceledException();
-
-                var updatedBoard = board.UpdateFromMoves(beat);
-
-                if (updatedBoard.CountEnemies(team) == 0)
-                    return beat;
-
-                var node = new PredictionNode
+                var predictions = new List<PredictionNode>();
+                foreach (var beat in beats)
                 {
-                    InitialMoves = beat,
-                    NextTeam = team.GetNextTeam(),
-                    NextBoard = updatedBoard,
-                    Depth = 0,
-                    AccumulatedWeight = _getMoveWeight.CalculateMoveWeight(beat, board, updatedBoard, team, true)
-                };
+                    var updatedBoard = board.UpdateFromMoves(beat);
 
-                predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
+                    if (updatedBoard.CountEnemies(team) == 0)
+                        return beat;
+
+                    var node = new PredictionNode
+                    {
+                        InitialMoves = beat,
+                        NextTeam = team.GetNextTeam(),
+                        NextBoard = updatedBoard,
+                        Depth = 0,
+                        AccumulatedWeight = _getMoveWeight.CalculateMoveWeight(beat, board, updatedBoard, team, true)
+                    };
+
+                    firstPredictions.Add(node);
+                    predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
+                }
+
+                foreach (var move in moves)
+                {
+                    if (token.IsCancellationRequested)
+                        throw new TaskCanceledException();
+
+                    var updatedBoard = board.UpdateFromMoves(move);
+
+                    var node = new PredictionNode
+                    {
+                        InitialMoves = move,
+                        NextTeam = team.GetNextTeam(),
+                        NextBoard = updatedBoard,
+                        Depth = 0,
+                        AccumulatedWeight = _getMoveWeight.CalculateMoveWeight(move, board, updatedBoard, team)
+                    };
+
+                    firstPredictions.Add(node);
+                    predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
+                }
+
+                var count = predictions.Count;
+                var topBeats = predictions.OrderByDescending(r => r.AccumulatedWeight).Take(5).Select(r => r.InitialMoves).ToList();
+                var countTop = topBeats.Count < count ? topBeats.Count : count;
+                return topBeats[_random.Next(0, countTop - 1)];
             }
 
-            foreach (var move in moves)
+            catch (TaskCanceledException)
             {
-                if (token.IsCancellationRequested)
-                    throw new TaskCanceledException();
-
-                var updatedBoard = board.UpdateFromMoves(move);
-
-                var node = new PredictionNode
-                {
-                    InitialMoves = move,
-                    NextTeam = team.GetNextTeam(),
-                    NextBoard = updatedBoard,
-                    Depth = 0,
-                    AccumulatedWeight = _getMoveWeight.CalculateMoveWeight(move, board, updatedBoard, team)
-                };
-
-                predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
+                Console.WriteLine("Task cancelled");
             }
 
-            var count = predictions.Count;
-            var topBeats = predictions.OrderByDescending(r => r.AccumulatedWeight).Take(5).Select(r => r.InitialMoves).ToList();
-            var countTop = topBeats.Count < count ? topBeats.Count : count;
-            return topBeats[_random.Next(0, countTop - 1)];
+            var bestFirstPredictions = firstPredictions.OrderByDescending(r => r.AccumulatedWeight).Take(5).Select(r => r.InitialMoves).ToList();
+            var countFirstBest = bestFirstPredictions.Count < firstPredictions.Count ? bestFirstPredictions.Count : firstPredictions.Count;
+            return bestFirstPredictions[_random.Next(0, countFirstBest - 1)];
         }
     }
 }
