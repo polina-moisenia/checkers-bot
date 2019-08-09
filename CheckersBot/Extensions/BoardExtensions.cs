@@ -76,5 +76,17 @@ namespace CheckersBot.Extensions
 
             return stats;
         }
+
+        public static int CountEnemies(this CellState[,] currentBoard, Team team)
+        {
+            var stats = currentBoard.GetBoardStats();
+
+            if (team == Team.Black)
+            {
+                return stats.WhiteKings + stats.WhitePieces;
+            }
+
+            return stats.BlackPieces + stats.BlackKings;
+        }
     }
 }

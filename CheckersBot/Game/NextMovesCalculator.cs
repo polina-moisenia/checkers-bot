@@ -11,73 +11,76 @@ namespace CheckersBot.Game
     public class NextMovesCalculator : INextMovesCalculator
     {
         private readonly Random _random = new Random();
-        private readonly IRankMoves _rankMoves;
         private readonly IPredictionBuilder _predictionBuilder;
+        private readonly IGetMoveWeight _getMoveWeight;
 
-        public NextMovesCalculator(IRankMoves rankMoves, IPredictionBuilder predictionBuilder)
+        public NextMovesCalculator(IPredictionBuilder predictionBuilder, IGetMoveWeight getMoveWeight)
         {
-            _rankMoves = rankMoves;
             _predictionBuilder = predictionBuilder;
+            _getMoveWeight = getMoveWeight;
         }
 
         public List<Move> GetCalculatedNextMoves(CellState[,] board, Team team, List<List<Move>> beats, List<List<Move>> moves, CancellationToken token)
         {
-            var stats = board.GetBoardStats();
-            if (stats.BlackPieces > 8 && stats.WhitePieces > 8)
+            var firstPredictions = new List<PredictionNode>();
+
+            try
             {
-                if (beats.Count > 0)
+                var predictions = new List<PredictionNode>();
+                foreach (var beat in beats)
                 {
-                    var rankedBeats = _rankMoves.GetRanks(beats, team, board);
-                    return GetRandomFromTopThree(rankedBeats);
+                    var updatedBoard = board.UpdateFromMoves(beat);
+
+                    if (updatedBoard.CountEnemies(team) == 0)
+                        return beat;
+
+                    var node = new PredictionNode
+                    {
+                        InitialMoves = beat,
+                        NextTeam = team.GetNextTeam(),
+                        NextBoard = updatedBoard,
+                        Depth = 0,
+                        AccumulatedWeight = _getMoveWeight.CalculateMoveWeight(beat, board, updatedBoard, team, true)
+                    };
+
+                    firstPredictions.Add(node);
+                    predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
                 }
 
-                var rankedMoves = _rankMoves.GetRanks(moves, team, board);
-                return GetRandomFromTopThree(rankedMoves);
-            }
-
-            var currentOptions = new List<List<Move>>();
-            currentOptions.AddRange(beats);
-            currentOptions.AddRange(moves);
-
-            var predictions = new List<PredictionNode>();
-
-            foreach (var move in currentOptions)
-            {
-                if (token.IsCancellationRequested)
-                    throw new TaskCanceledException();
-                var node = new PredictionNode(null, move, team, board, 0);
-                predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node,3, token));
-            }
-
-            var ranks = new List<MoveRank>();
-            foreach (var prediction in predictions)
-            {
-                var rank = new MoveRank
+                foreach (var move in moves)
                 {
-                    Rank = GetRankFromBoard(team, prediction.UpdatedBoard.GetBoardStats()),
-                    Move = prediction.InitialParent.CurrentMoves
-                };
+                    if (token.IsCancellationRequested)
+                        throw new TaskCanceledException();
 
-                ranks.Add(rank);
+                    var updatedBoard = board.UpdateFromMoves(move);
+
+                    var node = new PredictionNode
+                    {
+                        InitialMoves = move,
+                        NextTeam = team.GetNextTeam(),
+                        NextBoard = updatedBoard,
+                        Depth = 0,
+                        AccumulatedWeight = _getMoveWeight.CalculateMoveWeight(move, board, updatedBoard, team)
+                    };
+
+                    firstPredictions.Add(node);
+                    predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
+                }
+
+                var count = predictions.Count;
+                var topBeats = predictions.OrderByDescending(r => r.AccumulatedWeight).Take(5).Select(r => r.InitialMoves).ToList();
+                var countTop = topBeats.Count < count ? topBeats.Count : count;
+                return topBeats[_random.Next(0, countTop - 1)];
             }
 
-            return GetRandomFromTopThree(ranks);
-        }
+            catch (TaskCanceledException)
+            {
+                Console.WriteLine("Task cancelled");
+            }
 
-        private int GetRankFromBoard(Team team, GameStats stats)
-        {
-            var blackStats = stats.BlackPieces + stats.BlackKings * 3;
-            var whiteStats = stats.WhitePieces + stats.WhiteKings * 3;
-            var rank = blackStats - whiteStats;
-
-            return team == Team.Black ? rank : -rank;
-        }
-
-        private List<Move> GetRandomFromTopThree(List<MoveRank> ranks)
-        {
-            var topBeats = ranks.OrderByDescending(r => r.Rank).Take(3).Select(r => r.Move).ToList();
-            var count = topBeats.Count < ranks.Count ? topBeats.Count : ranks.Count;
-            return topBeats[_random.Next(0, count - 1)];
+            var bestFirstPredictions = firstPredictions.OrderByDescending(r => r.AccumulatedWeight).Take(5).Select(r => r.InitialMoves).ToList();
+            var countFirstBest = bestFirstPredictions.Count < firstPredictions.Count ? bestFirstPredictions.Count : firstPredictions.Count;
+            return bestFirstPredictions[_random.Next(0, countFirstBest - 1)];
         }
     }
 }
