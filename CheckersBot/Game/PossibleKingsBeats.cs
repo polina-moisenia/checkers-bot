@@ -173,7 +173,7 @@ namespace CheckersBot.Game
                     EndingPoint = possibleGoTo,
                 };
 
-                var newBoardArray = BoardExtensions.UpdateFromKingMoves(boardArray, new List<Move>() { move });
+                var newBoardArray = BoardExtensions.UpdateFromMoves(boardArray, new List<Move>() { move });
 
                 var beatsList = new List<Move>();
                 beatsList.Add(move);

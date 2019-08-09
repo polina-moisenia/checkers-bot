@@ -38,7 +38,7 @@ namespace CheckersBot.Tests
                 }
             };
 
-            var newBoard = board.UpdateFromKingMoves(move);
+            var newBoard = board.UpdateFromMoves(move);
 
             string expectedNewBoard = @"{
                 'team': 'w',
@@ -91,7 +91,7 @@ namespace CheckersBot.Tests
                 },
             };
 
-            var newBoard = board.UpdateFromKingMoves(move);
+            var newBoard = board.UpdateFromMoves(move);
 
             string expectedNewBoard = @"{
                 'team': 'w',
@@ -144,7 +144,7 @@ namespace CheckersBot.Tests
                 },
             };
 
-            var newBoard = board.UpdateFromKingMoves(move);
+            var newBoard = board.UpdateFromMoves(move);
 
             string expectedNewBoard = @"{
                 'team': 'w',
@@ -197,7 +197,7 @@ namespace CheckersBot.Tests
                 },
             };
 
-            var newBoard = board.UpdateFromKingMoves(move);
+            var newBoard = board.UpdateFromMoves(move);
 
             string expectedNewBoard = @"{
                 'team': 'w',
