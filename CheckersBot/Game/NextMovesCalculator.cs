@@ -52,26 +52,29 @@ namespace CheckersBot.Game
                     }
                 }
 
-                foreach (var move in moves)
+                if (beats.Count == 0)
                 {
-                    if (token.IsCancellationRequested)
-                        throw new TaskCanceledException();
-
-                    var updatedBoard = board.UpdateFromMoves(move);
-                    var ranking = _getMoveWeight.CalculateMoveWeight(move, board, updatedBoard, team);
-
-                    var node = new PredictionNode
+                    foreach (var move in moves)
                     {
-                        InitialMoves = move,
-                        NextTeam = team.GetNextTeam(),
-                        NextBoard = updatedBoard,
-                        Depth = 0,
-                        AccumulatedWeight = ranking.weight,
-                        StatsForPlayer = ranking.stats
-                    };
+                        if (token.IsCancellationRequested)
+                            throw new TaskCanceledException();
 
-                    firstPredictions.Add(node);
-                    predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
+                        var updatedBoard = board.UpdateFromMoves(move);
+                        var ranking = _getMoveWeight.CalculateMoveWeight(move, board, updatedBoard, team);
+
+                        var node = new PredictionNode
+                        {
+                            InitialMoves = move,
+                            NextTeam = team.GetNextTeam(),
+                            NextBoard = updatedBoard,
+                            Depth = 0,
+                            AccumulatedWeight = ranking.weight,
+                            StatsForPlayer = ranking.stats
+                        };
+
+                        firstPredictions.Add(node);
+                        predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
+                    }
                 }
 
                 return GetBestForRandom(predictions);
