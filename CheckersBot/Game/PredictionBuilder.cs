@@ -51,7 +51,7 @@ namespace CheckersBot.Game
                             NextTeam = teamNext.GetNextTeam(),
                             NextBoard = updatedBoard,
                             Depth = depth,
-                            AccumulatedWeight = node.AccumulatedWeight + (teamNext == teamPlaying ? +rank.weight : 0),
+                            AccumulatedWeight = node.AccumulatedWeight + (teamNext == teamPlaying ? +rank.weight : -rank.weight),
                             StatsForPlayer = teamNext == teamPlaying ? +rank.weight : -rank.weight
                         };
 
