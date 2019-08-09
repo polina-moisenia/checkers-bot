@@ -166,6 +166,50 @@ namespace CheckersBot.Tests.Game
         }
 
         [Test]
+        public void ThreePossibleBeatsWithLengthTest()
+        {
+            string jsonData = @"{
+                'team': 'w',
+                'field': [
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', 'b', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', 'b', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', 'b', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['W', '.', '.', '.', '.', '.', '.', '.']
+                ] 
+            }";
+            var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
+            {
+                new List<Move>
+                {
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 0, Y = 7},
+                        EndingPoint = new Cell {X = 3, Y = 4}
+                    },
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 3, Y = 4},
+                        EndingPoint = new Cell {X = 5, Y = 2}
+                    },
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 5, Y = 2},
+                        EndingPoint = new Cell {X = 7, Y = 0}
+                    },
+                }
+            };
+
+            CheckListOfListOfMoves(moves, expectedMoves);
+        }
+
+        [Test]
         public void TwoPossibleBeatsInAngleTest()
         {
             string jsonData = @"{
@@ -236,6 +280,50 @@ namespace CheckersBot.Tests.Game
                     {
                         StartingPoint = new Cell {X = 5, Y = 2},
                         EndingPoint = new Cell {X = 3, Y = 0}
+                    },
+                }
+            };
+
+            CheckListOfListOfMoves(moves, expectedMoves);
+        }
+
+        [Test]
+        public void ThreePossibleBeatsInAngleAtLengthTest()
+        {
+            string jsonData = @"{
+                'team': 'w',
+                'field': [
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', 'b', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', 'b', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', 'b', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['W', '.', '.', '.', '.', '.', '.', '.']
+                ] 
+            }";
+            var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
+            {
+                new List<Move>
+                {
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 0, Y = 7},
+                        EndingPoint = new Cell {X = 5, Y = 2}
+                    },
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 5, Y = 2},
+                        EndingPoint = new Cell {X = 3, Y = 0}
+                    },
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 3, Y = 0},
+                        EndingPoint = new Cell {X = 4, Y = 7}
                     },
                 }
             };

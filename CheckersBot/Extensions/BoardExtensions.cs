@@ -55,6 +55,39 @@ namespace CheckersBot.Extensions
             return updatedBoard;
         }
 
+        public static CellState[,] UpdateFromKingMoves(this CellState[,] currentBoard, List<Move> moves)
+        {
+            var updatedBoard = currentBoard.CloneJson();
+            foreach (var move in moves)
+            {
+                var check = updatedBoard[move.StartingPoint.X, move.StartingPoint.Y];
+                updatedBoard[move.StartingPoint.X, move.StartingPoint.Y] = CellState.Empty;
+                var nextMove = Clone.CloneJson(move);
+                while (Math.Abs(nextMove.EndingPoint.X - nextMove.StartingPoint.X) > 1)
+                {
+                    var xDiff = nextMove.EndingPoint.X - nextMove.StartingPoint.X > 0 ? -1 : 1;
+                    var yDiff = nextMove.EndingPoint.Y - nextMove.StartingPoint.Y > 0 ? -1 : 1;
+
+                    updatedBoard[nextMove.EndingPoint.X + xDiff, nextMove.EndingPoint.Y + yDiff] = CellState.Empty;
+                    nextMove.EndingPoint.X += xDiff;
+                    nextMove.EndingPoint.Y += yDiff;
+                }
+
+                if (move.EndingPoint.Y == 0 && check == CellState.WhitePiece)
+                {
+                    check = CellState.WhiteKing;
+                }
+                if (move.EndingPoint.Y == 7 && check == CellState.BlackPiece)
+                {
+                    check = CellState.BlackKing;
+                }
+
+                updatedBoard[move.EndingPoint.X, move.EndingPoint.Y] = check;
+            }
+
+            return updatedBoard;
+        }
+
         public static GameStats GetBoardStats(this CellState[,] currentBoard)
         {
             var stats = new GameStats();

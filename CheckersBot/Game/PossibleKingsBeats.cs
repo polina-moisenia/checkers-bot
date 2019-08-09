@@ -49,7 +49,7 @@ namespace CheckersBot.Game
         {
             var clonedBeats = Clone.CloneJson(beats);
             var possibleGoTos = new List<Cell>();
-            // TODO: 3 more times
+            // top right
             for (var count = 1; king.X + count <= 7 && king.Y - count >= 0; count++)
             {
                 if ((boardArray[king.X + count, king.Y - count] == CellState.BlackKing && teamPlaying == Team.White) ||
@@ -73,6 +73,78 @@ namespace CheckersBot.Game
                     break;
                 }
             }
+            // top left
+            for (var count = 1; king.X - count >= 0 && king.Y - count >= 0; count++)
+            {
+                if ((boardArray[king.X - count, king.Y - count] == CellState.BlackKing && teamPlaying == Team.White) ||
+                    (boardArray[king.X - count, king.Y - count] == CellState.BlackPiece && teamPlaying == Team.White) ||
+                    (boardArray[king.X - count, king.Y - count] == CellState.WhiteKing && teamPlaying == Team.Black) ||
+                    (boardArray[king.X - count, king.Y - count] == CellState.WhitePiece && teamPlaying == Team.Black))
+                {
+                    count++;
+                    for (; king.X - count >= 0 && king.Y - count >= 0; count++)
+                    {
+                        if (boardArray[king.X - count, king.Y - count] == CellState.Empty)
+                        {
+                            possibleGoTos.Add(new Cell
+                            {
+                                X = king.X - count,
+                                Y = king.Y - count,
+                            });
+                        }
+                    }
+
+                    break;
+                }
+            }
+            // bottom left
+            for (var count = 1; king.X - count >= 0 && king.Y + count <= 7; count++)
+            {
+                if ((boardArray[king.X - count, king.Y + count] == CellState.BlackKing && teamPlaying == Team.White) ||
+                    (boardArray[king.X - count, king.Y + count] == CellState.BlackPiece && teamPlaying == Team.White) ||
+                    (boardArray[king.X - count, king.Y + count] == CellState.WhiteKing && teamPlaying == Team.Black) ||
+                    (boardArray[king.X - count, king.Y + count] == CellState.WhitePiece && teamPlaying == Team.Black))
+                {
+                    count++;
+                    for (; king.X - count >= 0 && king.Y + count <= 7; count++)
+                    {
+                        if (boardArray[king.X - count, king.Y + count] == CellState.Empty)
+                        {
+                            possibleGoTos.Add(new Cell
+                            {
+                                X = king.X - count,
+                                Y = king.Y + count,
+                            });
+                        }
+                    }
+
+                    break;
+                }
+            }
+            // bottom right
+            for (var count = 1; king.X + count <= 7 && king.Y + count <= 7; count++)
+            {
+                if ((boardArray[king.X + count, king.Y + count] == CellState.BlackKing && teamPlaying == Team.White) ||
+                    (boardArray[king.X + count, king.Y + count] == CellState.BlackPiece && teamPlaying == Team.White) ||
+                    (boardArray[king.X + count, king.Y + count] == CellState.WhiteKing && teamPlaying == Team.Black) ||
+                    (boardArray[king.X + count, king.Y + count] == CellState.WhitePiece && teamPlaying == Team.Black))
+                {
+                    count++;
+                    for (; king.X + count <= 7 && king.Y + count <= 7; count++)
+                    {
+                        if (boardArray[king.X + count, king.Y + count] == CellState.Empty)
+                        {
+                            possibleGoTos.Add(new Cell
+                            {
+                                X = king.X + count,
+                                Y = king.Y + count,
+                            });
+                        }
+                    }
+
+                    break;
+                }
+            }
 
             if (possibleGoTos.Count == 0) return new List<Move>();
 
@@ -85,15 +157,18 @@ namespace CheckersBot.Game
                     EndingPoint = possibleGoTo,
                 };
 
-                // TODO: update from kings moves
-                var newBoardArray = BoardExtensions.UpdateFromMoves(boardArray, new List<Move>() { move });
+                var newBoardArray = BoardExtensions.UpdateFromKingMoves(boardArray, new List<Move>() { move });
 
                 var beatsList = new List<Move>();
                 beatsList.Add(move);
-                var newBeats = GetIndividualKingBeats(king, newBoardArray, teamPlaying, beatsList);
-                beatsList.AddRange(newBeats);
+                var newBeats = GetIndividualKingBeats(possibleGoTo, newBoardArray, teamPlaying, beatsList);
+                if (newBeats.Count > 1) {
+                    beatsList.AddRange(newBeats);
+                }
                 possibleBeats.Add(beatsList);
             });
+
+            if (possibleBeats.Count > 0)
 
             clonedBeats.AddRange(possibleBeats.OrderByDescending(x => x.Count()).First());
             return clonedBeats;
