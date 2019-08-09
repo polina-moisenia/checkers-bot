@@ -75,7 +75,7 @@ namespace CheckersBot.Game
                     }
 
                     break;
-                }
+                } else if (boardArray[king.X + count, king.Y - count] != CellState.Empty) { break; }
             }
             // top left
             for (var count = 1; king.X - count >= 0 && king.Y - count >= 0; count++)
@@ -103,7 +103,7 @@ namespace CheckersBot.Game
                     }
 
                     break;
-                }
+                } else if (boardArray[king.X - count, king.Y - count] != CellState.Empty) { break; }
             }
             // bottom left
             for (var count = 1; king.X - count >= 0 && king.Y + count <= 7; count++)
@@ -131,7 +131,7 @@ namespace CheckersBot.Game
                     }
 
                     break;
-                }
+                } else if (boardArray[king.X - count, king.Y + count] != CellState.Empty) { break; }
             }
             // bottom right
             for (var count = 1; king.X + count <= 7 && king.Y + count <= 7; count++)
@@ -159,7 +159,7 @@ namespace CheckersBot.Game
                     }
 
                     break;
-                }
+                } else if (boardArray[king.X + count, king.Y + count] != CellState.Empty) { break; }
             }
 
             if (possibleGoTos.Count == 0) return new List<Move>();

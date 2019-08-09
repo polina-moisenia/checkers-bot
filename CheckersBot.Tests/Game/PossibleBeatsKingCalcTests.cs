@@ -336,7 +336,7 @@ namespace CheckersBot.Tests.Game
         public void NoBeatsTwoInARow()
         {
             string jsonData = @"{
-                'team': 'B',
+                'team': 'b',
                 'field': [
                     ['.', '.', '.', '.', '.', '.', '.', '.'],
                     ['.', '.', '.', '.', '.', '.', '.', '.'],
@@ -354,6 +354,42 @@ namespace CheckersBot.Tests.Game
             var expectedMoves = new List<List<Move>>
             {
                 
+            };
+
+            CheckListOfListOfMoves(moves, expectedMoves);
+        }
+
+
+
+        [Test]
+        public void NoBeatsTwoInARowAgain()
+        {
+            string jsonData = @"{
+                'team': 'w',
+                'field': [
+                    ['.', '.', '.', '.', '.', 'W', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', 'w', '.', '.', '.', '.', '.'],
+                    ['.', 'b', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.'],
+                    ['.', '.', '.', '.', '.', '.', '.', '.']
+                ] 
+            }";
+            var boardModel = JsonConvert.DeserializeObject<BoardModel>(jsonData);
+            var moves = _beatsCalc.GetPossibleBeats(boardModel.ConvertToArray(), boardModel.TeamToMoveNext);
+
+            var expectedMoves = new List<List<Move>>
+            {
+                new List<Move>
+                {
+                    new Move
+                    {
+                        StartingPoint = new Cell {X = 2, Y = 3},
+                        EndingPoint = new Cell {X = 0, Y = 5}
+                    },
+                }
             };
 
             CheckListOfListOfMoves(moves, expectedMoves);
