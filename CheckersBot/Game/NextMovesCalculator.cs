@@ -36,7 +36,7 @@ namespace CheckersBot.Game
                         if (updatedBoard.CountEnemies(team) == 0)
                             return beat;
 
-                        var ranking = _getMoveWeight.CalculateMoveWeight(beat, board, updatedBoard, team);
+                        var ranking = _getMoveWeight.CalculateMoveWeight(beat, board, updatedBoard, team, true);
                         var node = new PredictionNode
                         {
                             InitialMoves = beat,
