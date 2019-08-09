@@ -113,17 +113,17 @@ namespace CheckersBot.Game
                 }
             }
 
-            //if (firstPosition.X < endPosition.X && firstPosition.X < 2)
-            //    weight--;
+            if (firstPosition.X < endPosition.X && firstPosition.X < 2)
+                weight--;
 
-            //if (firstPosition.X > endPosition.X && firstPosition.X < 2)
-            //    weight++;
+            if (firstPosition.X > endPosition.X && firstPosition.X < 2)
+                weight++;
 
-            //if (firstPosition.X > endPosition.X && firstPosition.X > 5)
-            //    weight--;
+            if (firstPosition.X > endPosition.X && firstPosition.X > 5)
+                weight--;
 
-            //if (firstPosition.X < endPosition.X && firstPosition.X > 5)
-            //    weight++;
+            if (firstPosition.X < endPosition.X && firstPosition.X > 5)
+                weight++;
 
             return (weight, stats);
         }
