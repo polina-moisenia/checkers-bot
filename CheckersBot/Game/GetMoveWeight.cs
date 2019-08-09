@@ -23,33 +23,33 @@ namespace CheckersBot.Game
 
                 if (initStat.BlackKings > endStat.BlackKings && team == Team.White)
                 {
-                    weight += (initStat.BlackKings - endStat.BlackKings) * 15;
+                    weight += (initStat.BlackKings - endStat.BlackKings) * 7;
                 }
 
                 if (initStat.WhiteKings > endStat.WhiteKings && team == Team.Black)
                 {
-                    weight += (initStat.WhiteKings - endStat.WhiteKings) * 15;
+                    weight += (initStat.WhiteKings - endStat.WhiteKings) * 7;
                 }
             }
 
             if (initStat.BlackKings < endStat.BlackKings && team == Team.Black)
             {
-                weight += (endStat.BlackKings - initStat.BlackKings) * 8;
+                weight += (endStat.BlackKings - initStat.BlackKings) * 5;
             }
 
             if (initStat.WhiteKings < endStat.WhiteKings && team == Team.White)
             {
-                weight += (endStat.WhiteKings - initStat.WhiteKings) * 8;
+                weight += (endStat.WhiteKings - initStat.WhiteKings) * 5;
             }
 
             if (initStat.BlackKings > endStat.BlackKings && team == Team.Black)
             {
-                weight -= (initStat.BlackKings - endStat.BlackKings) * 8;
+                weight -= (initStat.BlackKings - endStat.BlackKings) * 5;
             }
 
             if (initStat.WhiteKings > endStat.WhiteKings && team == Team.White)
             {
-                weight -= (initStat.WhiteKings - endStat.WhiteKings) * 8;
+                weight -= (initStat.WhiteKings - endStat.WhiteKings) * 5;
             }
 
             var firstPosition = moves.First().StartingPoint;
@@ -70,48 +70,48 @@ namespace CheckersBot.Game
             var enemies = team.GetEnemies();
             var friends = team.GetNextTeam().GetEnemies();
 
-            var increments = new List<int> { -1, 1};
-            foreach (var xInc in increments)
-            {
-                foreach (var yInc in increments)
-                {
-                    if (firstPosition.X + xInc < 8 && firstPosition.X + xInc >= 0 &&
-                        firstPosition.Y + yInc < 8 && firstPosition.Y + yInc >= 0 &&
-                        enemies.Contains(boardBefore[firstPosition.X + xInc, firstPosition.Y + yInc]))
-                    {
-                        if (firstPosition.X - xInc < 8 && firstPosition.X - xInc >= 0 &&
-                            firstPosition.Y - yInc < 8 && firstPosition.Y - yInc >= 0 &&
-                            boardBefore[firstPosition.X - xInc, firstPosition.Y - yInc] == CellState.Empty)
-                        {
-                            weight += 1;
-                        }
-                    }
+            //var increments = new List<int> { -1, 1};
+            //foreach (var xInc in increments)
+            //{
+            //    foreach (var yInc in increments)
+            //    {
+            //        if (firstPosition.X + xInc < 8 && firstPosition.X + xInc >= 0 &&
+            //            firstPosition.Y + yInc < 8 && firstPosition.Y + yInc >= 0 &&
+            //            enemies.Contains(boardBefore[firstPosition.X + xInc, firstPosition.Y + yInc]))
+            //        {
+            //            if (firstPosition.X - xInc < 8 && firstPosition.X - xInc >= 0 &&
+            //                firstPosition.Y - yInc < 8 && firstPosition.Y - yInc >= 0 &&
+            //                boardBefore[firstPosition.X - xInc, firstPosition.Y - yInc] == CellState.Empty)
+            //            {
+            //                weight += 1;
+            //            }
+            //        }
 
-                    if (endPosition.X + xInc < 8 && endPosition.X + xInc >= 0 &&
-                        endPosition.Y + yInc < 8 && endPosition.Y + yInc >= 0 &&
-                        enemies.Contains(boardAfter[endPosition.X + xInc, endPosition.Y + yInc]))
-                    {
-                        if (firstPosition.X - xInc < 8 && firstPosition.X - xInc >= 0 &&
-                            firstPosition.Y - yInc < 8 && firstPosition.Y - yInc >= 0 &&
-                            boardBefore[firstPosition.X - xInc, firstPosition.Y - yInc] == CellState.Empty)
-                        {
-                            weight -= 1;
-                        }
-                    }
+            //        if (endPosition.X + xInc < 8 && endPosition.X + xInc >= 0 &&
+            //            endPosition.Y + yInc < 8 && endPosition.Y + yInc >= 0 &&
+            //            enemies.Contains(boardAfter[endPosition.X + xInc, endPosition.Y + yInc]))
+            //        {
+            //            if (firstPosition.X - xInc < 8 && firstPosition.X - xInc >= 0 &&
+            //                firstPosition.Y - yInc < 8 && firstPosition.Y - yInc >= 0 &&
+            //                boardBefore[firstPosition.X - xInc, firstPosition.Y - yInc] == CellState.Empty)
+            //            {
+            //                weight -= 1;
+            //            }
+            //        }
 
-                    if (endPosition.X + xInc * 2 < 8 && endPosition.X + xInc * 2 >= 0 &&
-                        endPosition.Y + yInc * 2 < 8 && endPosition.Y + yInc * 2 >= 0 &&
-                        enemies.Contains(boardAfter[endPosition.X + xInc * 2, endPosition.Y + yInc * 2]))
-                    {
-                        if (firstPosition.X + xInc < 8 && firstPosition.X + xInc >= 0 &&
-                            firstPosition.Y + yInc < 8 && firstPosition.Y + yInc >= 0 &&
-                            friends.Contains(boardAfter[firstPosition.X + xInc, firstPosition.Y + yInc]))
-                        {
-                            weight += 1;
-                        }
-                    }
-                }
-            }
+            //        if (endPosition.X + xInc * 2 < 8 && endPosition.X + xInc * 2 >= 0 &&
+            //            endPosition.Y + yInc * 2 < 8 && endPosition.Y + yInc * 2 >= 0 &&
+            //            enemies.Contains(boardAfter[endPosition.X + xInc * 2, endPosition.Y + yInc * 2]))
+            //        {
+            //            if (firstPosition.X + xInc < 8 && firstPosition.X + xInc >= 0 &&
+            //                firstPosition.Y + yInc < 8 && firstPosition.Y + yInc >= 0 &&
+            //                friends.Contains(boardAfter[firstPosition.X + xInc, firstPosition.Y + yInc]))
+            //            {
+            //                weight += 1;
+            //            }
+            //        }
+            //    }
+            //}
 
             //if (firstPosition.X < endPosition.X && firstPosition.X < 2)
             //    weight--;
