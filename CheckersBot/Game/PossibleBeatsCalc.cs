@@ -14,7 +14,7 @@ namespace CheckersBot.Game
             {
                 for (int j = 0; j < 8; j++)
                 {
-                    if ((boardArray[i, j] == CellState.WhitePiece || boardArray[i, j] == CellState.WhiteKing) && teamPlaying == Team.White)
+                    if (boardArray[i, j] == CellState.WhitePiece && teamPlaying == Team.White)
                     {
                         if (i - 2 >= 0 && j - 2 >= 0 &&
                             (boardArray[i - 1, j - 1] == CellState.BlackPiece || boardArray[i - 1, j - 1] == CellState.BlackKing) &&
@@ -76,7 +76,7 @@ namespace CheckersBot.Game
                             possibleBeats.Add(beats);
                         }
                     }
-                    else if ((boardArray[i, j] == CellState.BlackPiece || boardArray[i, j] == CellState.BlackKing) && teamPlaying == Team.Black)
+                    else if (boardArray[i, j] == CellState.BlackPiece && teamPlaying == Team.Black)
                     {
                         if (i + 2 <= 7 && j + 2 <= 7 &&
                             (boardArray[i + 1, j + 1] == CellState.WhitePiece || boardArray[i + 1, j + 1] == CellState.WhiteKing)
@@ -145,6 +145,8 @@ namespace CheckersBot.Game
                     }
                 }
             }
+
+            possibleBeats.AddRange(PossibleKingsBeats.GetPossibleKingsBeats(boardArray, teamPlaying));
 
             return possibleBeats;
         }
