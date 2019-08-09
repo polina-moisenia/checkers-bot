@@ -32,36 +32,6 @@ namespace CheckersBot.Extensions
             {
                 var check = updatedBoard[move.StartingPoint.X, move.StartingPoint.Y];
                 updatedBoard[move.StartingPoint.X, move.StartingPoint.Y] = CellState.Empty;
-                if (Math.Abs(move.EndingPoint.X - move.StartingPoint.X) > 1)
-                {
-                    var xDiff = move.EndingPoint.X - move.StartingPoint.X > 0 ? -1 : 1;
-                    var yDiff = move.EndingPoint.Y - move.StartingPoint.Y > 0 ? -1 : 1;
-
-                    updatedBoard[move.EndingPoint.X + xDiff, move.EndingPoint.Y + yDiff] = CellState.Empty;
-                }
-
-                if (move.EndingPoint.Y == 0 && check == CellState.WhitePiece)
-                {
-                    check = CellState.WhiteKing;
-                }
-                if (move.EndingPoint.Y == 7 && check == CellState.BlackPiece)
-                {
-                    check = CellState.BlackKing;
-                }
-
-                updatedBoard[move.EndingPoint.X, move.EndingPoint.Y] = check;
-            }
-
-            return updatedBoard;
-        }
-
-        public static CellState[,] UpdateFromKingMoves(this CellState[,] currentBoard, List<Move> moves)
-        {
-            var updatedBoard = currentBoard.CloneJson();
-            foreach (var move in moves)
-            {
-                var check = updatedBoard[move.StartingPoint.X, move.StartingPoint.Y];
-                updatedBoard[move.StartingPoint.X, move.StartingPoint.Y] = CellState.Empty;
                 var nextMove = Clone.CloneJson(move);
                 while (Math.Abs(nextMove.EndingPoint.X - nextMove.StartingPoint.X) > 1)
                 {
