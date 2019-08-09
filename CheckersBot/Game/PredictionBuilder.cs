@@ -41,7 +41,7 @@ namespace CheckersBot.Game
                 if (beat.Count > 0)
                 {
                     var updatedBoard = boardNext.UpdateFromMoves(beat);
-                    var weight = _getMoveWeight.CalculateMoveWeight(beat, boardNext, updatedBoard, teamNext);
+                    var weight = _getMoveWeight.CalculateMoveWeight(beat, boardNext, updatedBoard, teamNext, true);
 
                     var nodeNext = new PredictionNode
                     {
