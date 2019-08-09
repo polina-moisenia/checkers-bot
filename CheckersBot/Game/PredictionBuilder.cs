@@ -38,23 +38,26 @@ namespace CheckersBot.Game
                 if (token.IsCancellationRequested)
                     throw new TaskCanceledException();
 
-                var updatedBoard = boardNext.UpdateFromMoves(beat);
-                var weight = _getMoveWeight.CalculateMoveWeight(beat, boardNext, updatedBoard, teamNext);
-
-                var nodeNext = new PredictionNode
+                if (beat.Count > 0)
                 {
-                    InitialMoves = node.InitialMoves,
-                    NextTeam = teamNext.GetNextTeam(),
-                    NextBoard = updatedBoard,
-                    Depth = depth,
-                    AccumulatedWeight = node.AccumulatedWeight + (teamNext == teamPlaying ? + weight : -weight)
-                };
+                    var updatedBoard = boardNext.UpdateFromMoves(beat);
+                    var weight = _getMoveWeight.CalculateMoveWeight(beat, boardNext, updatedBoard, teamNext);
 
-                if (depth == predictionDepth && toKill == 0)
-                    nextPossibilities.Add(nodeNext);
+                    var nodeNext = new PredictionNode
+                    {
+                        InitialMoves = node.InitialMoves,
+                        NextTeam = teamNext.GetNextTeam(),
+                        NextBoard = updatedBoard,
+                        Depth = depth,
+                        AccumulatedWeight = node.AccumulatedWeight + (teamNext == teamPlaying ? +weight : -weight)
+                    };
 
-                if (depth < predictionDepth && toKill > 0)
-                    nextPossibilities.AddRange(GetDepthwisePrediction(nodeNext, teamPlaying, predictionDepth, token));
+                    if (depth == predictionDepth && toKill == 0)
+                        nextPossibilities.Add(nodeNext);
+
+                    if (depth < predictionDepth && toKill > 0)
+                        nextPossibilities.AddRange(GetDepthwisePrediction(nodeNext, teamPlaying, predictionDepth, token));
+                }
             }
 
             var moves = _movesCalc.GetPossibleMoves(boardNext, teamNext);

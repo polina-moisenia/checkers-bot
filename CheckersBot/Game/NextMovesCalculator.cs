@@ -29,22 +29,26 @@ namespace CheckersBot.Game
                 var predictions = new List<PredictionNode>();
                 foreach (var beat in beats)
                 {
-                    var updatedBoard = board.UpdateFromMoves(beat);
-
-                    if (updatedBoard.CountEnemies(team) == 0)
-                        return beat;
-
-                    var node = new PredictionNode
+                    if (beat.Count > 0)
                     {
-                        InitialMoves = beat,
-                        NextTeam = team.GetNextTeam(),
-                        NextBoard = updatedBoard,
-                        Depth = 0,
-                        AccumulatedWeight = _getMoveWeight.CalculateMoveWeight(beat, board, updatedBoard, team, true)
-                    };
+                        var updatedBoard = board.UpdateFromMoves(beat);
 
-                    firstPredictions.Add(node);
-                    predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
+                        if (updatedBoard.CountEnemies(team) == 0)
+                            return beat;
+
+                        var node = new PredictionNode
+                        {
+                            InitialMoves = beat,
+                            NextTeam = team.GetNextTeam(),
+                            NextBoard = updatedBoard,
+                            Depth = 0,
+                            AccumulatedWeight =
+                                _getMoveWeight.CalculateMoveWeight(beat, board, updatedBoard, team, true)
+                        };
+
+                        firstPredictions.Add(node);
+                        predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
+                    }
                 }
 
                 foreach (var move in moves)
@@ -68,9 +72,9 @@ namespace CheckersBot.Game
                 }
 
                 var count = predictions.Count;
-                var topBeats = predictions.OrderByDescending(r => r.AccumulatedWeight).Take(5).Select(r => r.InitialMoves).ToList();
+                var topBeats = predictions.OrderByDescending(r => r.AccumulatedWeight).Take(3).ToList();
                 var countTop = topBeats.Count < count ? topBeats.Count : count;
-                return topBeats[_random.Next(0, countTop - 1)];
+                return topBeats[_random.Next(0, countTop - 1)].InitialMoves;
             }
 
             catch (TaskCanceledException)

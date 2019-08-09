@@ -32,12 +32,22 @@ namespace CheckersBot.Game
 
             if (initStat.BlackKings < endStat.BlackKings && team == Team.Black)
             {
-                weight += (endStat.BlackKings - initStat.BlackKings) * 10;
+                weight += (endStat.BlackKings - initStat.BlackKings) * 8;
             }
 
             if (initStat.WhiteKings < endStat.WhiteKings && team == Team.White)
             {
-                weight += (endStat.WhiteKings - initStat.WhiteKings) * 10;
+                weight += (endStat.WhiteKings - initStat.WhiteKings) * 8;
+            }
+
+            if (initStat.BlackKings > endStat.BlackKings && team == Team.Black)
+            {
+                weight -= (initStat.BlackKings - endStat.BlackKings) * 10;
+            }
+
+            if (initStat.WhiteKings > endStat.WhiteKings && team == Team.White)
+            {
+                weight -= (initStat.WhiteKings - endStat.WhiteKings) * 10;
             }
 
             var firstPosition = moves.First().StartingPoint;
@@ -46,13 +56,13 @@ namespace CheckersBot.Game
             if (team == Team.White)
             {
                 if (firstPosition.Y > endPosition.Y)
-                    weight++;
+                    weight+=2;
             }
 
             if (team == Team.Black)
             {
                 if (firstPosition.Y < endPosition.Y)
-                    weight++;
+                    weight+=2;
             }
 
             var enemies = team.GetEnemies();
