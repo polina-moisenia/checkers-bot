@@ -23,7 +23,7 @@ namespace CheckersBot.Game
 
                 if (initStat.BlackKings > endStat.BlackKings && team == Team.White)
                 {
-                    weight += (initStat.BlackKings - endStat.BlackKings) * 15;
+                    weight += (initStat.BlackKings - endStat.BlackKings) * 10;
                 }
 
                 if (initStat.WhiteKings > endStat.WhiteKings && team == Team.Black)
@@ -44,12 +44,12 @@ namespace CheckersBot.Game
 
             if (initStat.BlackKings > endStat.BlackKings && team == Team.Black)
             {
-                weight -= (initStat.BlackKings - endStat.BlackKings) * 8;
+                weight -= (initStat.BlackKings - endStat.BlackKings) * 10;
             }
 
             if (initStat.WhiteKings > endStat.WhiteKings && team == Team.White)
             {
-                weight -= (initStat.WhiteKings - endStat.WhiteKings) * 8;
+                weight -= (initStat.WhiteKings - endStat.WhiteKings) * 10;
             }
 
             var firstPosition = moves.First().StartingPoint;
