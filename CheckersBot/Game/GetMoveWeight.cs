@@ -21,36 +21,36 @@ namespace CheckersBot.Game
                     return (100, stats);
                 weight += moves.Count * 5;
 
-                if (initStat.BlackKings > endStat.BlackKings && team == Team.White)
-                {
-                    weight += (initStat.BlackKings - endStat.BlackKings) * 10;
-                }
+                //if (initStat.BlackKings > endStat.BlackKings && team == Team.White)
+                //{
+                //    weight += (initStat.BlackKings - endStat.BlackKings) * 10;
+                //}
 
-                if (initStat.WhiteKings > endStat.WhiteKings && team == Team.Black)
-                {
-                    weight += (initStat.WhiteKings - endStat.WhiteKings) * 15;
-                }
+                //if (initStat.WhiteKings > endStat.WhiteKings && team == Team.Black)
+                //{
+                //    weight += (initStat.WhiteKings - endStat.WhiteKings) * 15;
+                //}
             }
 
-            if (initStat.BlackKings < endStat.BlackKings && team == Team.Black)
-            {
-                weight += (endStat.BlackKings - initStat.BlackKings) * 8;
-            }
+            //if (initStat.BlackKings < endStat.BlackKings && team == Team.Black)
+            //{
+            //    weight += (endStat.BlackKings - initStat.BlackKings) * 8;
+            //}
 
-            if (initStat.WhiteKings < endStat.WhiteKings && team == Team.White)
-            {
-                weight += (endStat.WhiteKings - initStat.WhiteKings) * 8;
-            }
+            //if (initStat.WhiteKings < endStat.WhiteKings && team == Team.White)
+            //{
+            //    weight += (endStat.WhiteKings - initStat.WhiteKings) * 8;
+            //}
 
-            if (initStat.BlackKings > endStat.BlackKings && team == Team.Black)
-            {
-                weight -= (initStat.BlackKings - endStat.BlackKings) * 10;
-            }
+            //if (initStat.BlackKings > endStat.BlackKings && team == Team.Black)
+            //{
+            //    weight -= (initStat.BlackKings - endStat.BlackKings) * 10;
+            //}
 
-            if (initStat.WhiteKings > endStat.WhiteKings && team == Team.White)
-            {
-                weight -= (initStat.WhiteKings - endStat.WhiteKings) * 10;
-            }
+            //if (initStat.WhiteKings > endStat.WhiteKings && team == Team.White)
+            //{
+            //    weight -= (initStat.WhiteKings - endStat.WhiteKings) * 10;
+            //}
 
             var firstPosition = moves.First().StartingPoint;
             var endPosition = moves.Last().EndingPoint;

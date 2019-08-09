@@ -48,7 +48,7 @@ namespace CheckersBot.Game
                         };
 
                         firstPredictions.Add(node);
-                        predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 2, token));
+                        predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
                     }
                 }
 
@@ -71,7 +71,7 @@ namespace CheckersBot.Game
                     };
 
                     firstPredictions.Add(node);
-                    predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 2, token));
+                    predictions.AddRange(_predictionBuilder.GetDepthwisePrediction(node, team, 3, token));
                 }
 
                 return GetBestForRandom(predictions);
